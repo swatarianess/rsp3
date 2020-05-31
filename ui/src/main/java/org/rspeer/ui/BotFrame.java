@@ -38,5 +38,7 @@ public class BotFrame extends JFrame {
         setJMenuBar(new BotMenuBar(environment));
         environment.getBotContext().setFrame(this);
         pack();
+        setMinimumSize(getSize());
+        //TODO: Implement logger & save its show/hide state in a settings file
     }
 }
