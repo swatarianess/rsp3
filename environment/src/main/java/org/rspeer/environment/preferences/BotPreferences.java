@@ -19,9 +19,13 @@ public class BotPreferences {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-        save();
+    private static void save(BotPreferences preferences) {
+        Gson gson = new Gson();
+        try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
+            gson.toJson(gson.toJsonTree(preferences), writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Debug getDebug() {
@@ -32,16 +36,14 @@ public class BotPreferences {
         return window;
     }
 
-    private void save() {
-        Gson gson = new Gson();
-        try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
-            gson.toJson(gson.toJsonTree(this), writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        save(this);
     }
 
-    public class Debug {
+    public static class Debug {
+
+        private static BotPreferences preferences;
 
         private boolean renderGameDebug = false;
         private boolean renderScene = true;
@@ -50,9 +52,8 @@ public class BotPreferences {
             return renderGameDebug;
         }
 
-        public void setGameDebugRenderingEnabled(boolean enabled) {
-            this.renderGameDebug = enabled;
-            save();
+        public static void setPreferences(BotPreferences preferences) {
+            Debug.preferences = preferences;
         }
 
         public boolean isSceneRenderingEnabled() {
@@ -61,11 +62,18 @@ public class BotPreferences {
 
         public void setSceneRenderingEnabled(boolean enabled) {
             this.renderScene = enabled;
-            save();
+            save(preferences);
+        }
+
+        public void setGameDebugRenderingEnabled(boolean enabled) {
+            this.renderGameDebug = enabled;
+            save(preferences);
         }
     }
 
-    public class Window {
+    public static class Window {
+
+        private static BotPreferences preferences;
 
         private boolean alwaysOnTop = false;
 
@@ -73,9 +81,13 @@ public class BotPreferences {
             return alwaysOnTop;
         }
 
+        public static void setPreferences(BotPreferences preferences) {
+            Window.preferences = preferences;
+        }
+
         public void setAlwaysOnTop(boolean alwaysOnTop) {
             this.alwaysOnTop = alwaysOnTop;
-            save();
+            save(preferences);
         }
     }
 }
