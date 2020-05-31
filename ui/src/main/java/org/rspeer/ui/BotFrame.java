@@ -27,10 +27,18 @@ public class BotFrame extends JFrame {
             e.printStackTrace();
         }
 
+        /*
+            Turns Lightweight popup components into Heavyweight to prevent Applet from drawing over them.
+            Has to be done before the creation of any component that utilises a Lightweight component (Ex: JPopupMenu).
+         */
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+
         add(Game.getClient().asApplet(), BorderLayout.CENTER);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(new BotMenuBar(environment));
         environment.getBotContext().setFrame(this);
         pack();
+        setMinimumSize(getSize());
+        //TODO: Implement logger & save its show/hide state in a settings file
     }
 }
