@@ -27,9 +27,9 @@ import java.util.Map;
 
 public interface RSClient extends RSGameEngine {
 
-    boolean isSceneRenderingEnabled();
+    boolean isSceneRenderingDisabled();
 
-    void setSceneRenderingEnabled(boolean enabled);
+    void setSceneRenderingDisabled(boolean enabled);
 
     void processDialogActionPacket(int componentUid, int subComponentIndex);
 
