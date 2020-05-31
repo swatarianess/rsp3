@@ -34,7 +34,12 @@
             <version>0.20</version>
             <scope>runtime</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.rspeer</groupId>
+            <artifactId>loader</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 

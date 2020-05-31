@@ -2,13 +2,12 @@ package org.rspeer.ui;
 
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.environment.preferences.BotPreferences;
-import org.rspeer.game.Game;
 import org.rspeer.ui.component.menu.BotMenuBar;
-import org.rspeer.ui.debug.GameDebug;
+import org.rspeer.ui.component.welcome.WelcomePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.applet.Applet;
 import java.awt.*;
 import java.io.IOException;
 
@@ -16,22 +15,23 @@ public class BotFrame extends JFrame {
 
     private final Environment environment;
 
-    public BotFrame(Environment environment, GameDebug gameDebug) {
+    private BotMenuBar botMenuBar;
+    private WelcomePanel welcomePanel;
+
+    public BotFrame(Environment environment) {
         super(Configuration.getApplicationTitle());
         this.environment = environment;
-        applyComponents(gameDebug);
+        applyComponents();
     }
 
-    private void applyComponents(GameDebug gameDebug) {
+    private void applyComponents() {
         try {
             setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        BotPreferences.Window windowPref = environment.getPreferences().getWindow();
-
-        setAlwaysOnTop(windowPref.isAlwaysOnTop());
+        setAlwaysOnTop(environment.getPreferences().getWindow().isAlwaysOnTop());
 
         /*
             Turns Lightweight popup components into Heavyweight to prevent Applet from drawing over them.
@@ -39,12 +39,36 @@ public class BotFrame extends JFrame {
          */
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-        add(Game.getClient().asApplet(), BorderLayout.CENTER);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setJMenuBar(new BotMenuBar(environment, gameDebug));
+
+        welcomePanel = new WelcomePanel();
+        add(welcomePanel, BorderLayout.CENTER);
+
+        botMenuBar = new BotMenuBar(environment);
+        setJMenuBar(botMenuBar);
+
         environment.getBotContext().setFrame(this);
+
         pack();
         setMinimumSize(getSize());
-        //TODO: Implement logger & save its show/hide state in a settings file
+        //TODO: Implement logger & save its show/hide state in the preferences file
+    }
+
+    public void setApplet(Applet applet) {
+        if (welcomePanel != null) {
+            welcomePanel = null;
+        }
+        BorderLayout layout = (BorderLayout) getContentPane().getLayout();
+        Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+        remove(previousComp);
+        add(applet, BorderLayout.CENTER);
+    }
+
+    public BotMenuBar getBotMenuBar() {
+        return botMenuBar;
+    }
+
+    public WelcomePanel getWelcomePanel() {
+        return welcomePanel;
     }
 }

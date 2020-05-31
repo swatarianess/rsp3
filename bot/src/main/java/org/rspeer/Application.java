@@ -2,15 +2,14 @@ package org.rspeer;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.BotPreferences;
-import org.rspeer.game.Game;
-import org.rspeer.game.loader.GameLoader;
+import org.rspeer.environment.preferences.BotPreferencesLoader;
 import org.rspeer.ui.BotFrame;
-import org.rspeer.ui.debug.GameDebug;
+import org.rspeer.ui.worker.GameWorker;
 
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * Entry point for the application
@@ -32,41 +31,36 @@ public class Application {
         }
     }
 
-    public void start() throws IOException {
-        BotPreferences.Debug debugPref = environment.getPreferences().getDebug();
-
-        GameDebug gameDebug;
-        if (debugPref.isGameDebugRenderingEnabled()) {
-            gameDebug = new GameDebug();
-        } else {
-            gameDebug = null;
-        }
-
-        GameLoader.load(true, client -> {
-            Game.setClient(client);
-            //TODO: Remove boolean inversion once the modscript has been updated
-            client.setSceneRenderingEnabled(!debugPref.isSceneRenderingEnabled());
-            if (debugPref.isGameDebugRenderingEnabled()) {
-                client.getEventDispatcher().subscribe(gameDebug);
-            }
+    public void start() {
+        System.out.println("Loading ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
+        BotPreferencesLoader.load(true, preferences -> {
+            BotPreferences.Debug.setPreferences(preferences);
+            BotPreferences.Window.setPreferences(preferences);
+            environment.setPreferences(preferences);
+            System.out.println("Successfully loaded ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
         });
 
         SwingUtilities.invokeLater(() -> {
-            try {
-                FlatLaf laf = new FlatLightLaf();
-                FlatLaf.install(laf);
-                UIManager.setLookAndFeel(laf);
-                System.setProperty("sun.awt.noerasebackground", "true");
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                JDialog.setDefaultLookAndFeelDecorated(true);
+            FlatLaf laf = new FlatLightLaf();
+            FlatLaf.install(laf);
 
-                BotFrame ui = new BotFrame(environment, gameDebug);
-                ui.pack();
-                ui.validate();
-                ui.setVisible(true);
-            } catch (Exception e) {
+            try {
+                UIManager.setLookAndFeel(laf);
+            } catch (UnsupportedLookAndFeelException e) {
                 e.printStackTrace();
             }
+
+            System.setProperty("sun.awt.noerasebackground", "true");
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
+
+            BotFrame ui = new BotFrame(environment);
+            ui.pack();
+            ui.validate();
+            ui.setVisible(true);
+
+            GameWorker gameWorker = new GameWorker(environment, ui);
+            gameWorker.execute();
         });
     }
 }
