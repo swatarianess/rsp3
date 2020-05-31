@@ -39,7 +39,6 @@ public class Application {
         });
 
         SwingUtilities.invokeLater(() -> {
-
             BotFrame ui = new BotFrame(environment);
             ui.setVisible(true);
 
