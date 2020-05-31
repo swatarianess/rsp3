@@ -1,7 +1,5 @@
 package org.rspeer;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.BotPreferences;
@@ -41,22 +39,8 @@ public class Application {
         });
 
         SwingUtilities.invokeLater(() -> {
-            FlatLaf laf = new FlatLightLaf();
-            FlatLaf.install(laf);
-
-            try {
-                UIManager.setLookAndFeel(laf);
-            } catch (UnsupportedLookAndFeelException e) {
-                e.printStackTrace();
-            }
-
-            System.setProperty("sun.awt.noerasebackground", "true");
-            JFrame.setDefaultLookAndFeelDecorated(true);
-            JDialog.setDefaultLookAndFeelDecorated(true);
 
             BotFrame ui = new BotFrame(environment);
-            ui.pack();
-            ui.validate();
             ui.setVisible(true);
 
             GameWorker gameWorker = new GameWorker(environment, ui);

@@ -21,7 +21,18 @@ public class BotFrame extends JFrame {
     public BotFrame(Environment environment) {
         super(Configuration.getApplicationTitle());
         this.environment = environment;
+        applyDefaults();
         applyComponents();
+    }
+
+    private void applyDefaults() {
+        System.setProperty("sun.awt.noerasebackground", "true");
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
     }
 
     private void applyComponents() {
@@ -32,12 +43,6 @@ public class BotFrame extends JFrame {
         }
 
         setAlwaysOnTop(environment.getPreferences().getWindow().isAlwaysOnTop());
-
-        /*
-            Turns Lightweight popup components into Heavyweight to prevent Applet from drawing over them.
-            Has to be done before the creation of any component that utilises a Lightweight component (Ex: JPopupMenu).
-         */
-        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -50,7 +55,9 @@ public class BotFrame extends JFrame {
         environment.getBotContext().setFrame(this);
 
         pack();
+        setLocationRelativeTo(null);
         setMinimumSize(getSize());
+        validate();
         //TODO: Implement logger & save its show/hide state in the preferences file
     }
 
