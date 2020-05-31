@@ -3,9 +3,11 @@ package org.rspeer;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
 import org.rspeer.ui.BotFrame;
+import org.rspeer.ui.debug.GameDebug;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -31,7 +33,23 @@ public class Application {
     }
 
     public void start() throws IOException {
-        GameLoader.load(true, Game::setClient);
+        BotPreferences.Debug debugPref = environment.getPreferences().getDebug();
+
+        GameDebug gameDebug;
+        if (debugPref.isGameDebugRenderingEnabled()) {
+            gameDebug = new GameDebug();
+        } else {
+            gameDebug = null;
+        }
+
+        GameLoader.load(true, client -> {
+            Game.setClient(client);
+            //TODO: Remove boolean inversion once the modscript has been updated
+            client.setSceneRenderingEnabled(!debugPref.isSceneRenderingEnabled());
+            if (debugPref.isGameDebugRenderingEnabled()) {
+                client.getEventDispatcher().subscribe(gameDebug);
+            }
+        });
 
         SwingUtilities.invokeLater(() -> {
             try {
@@ -42,7 +60,7 @@ public class Application {
                 JFrame.setDefaultLookAndFeelDecorated(true);
                 JDialog.setDefaultLookAndFeelDecorated(true);
 
-                BotFrame ui = new BotFrame(environment);
+                BotFrame ui = new BotFrame(environment, gameDebug);
                 ui.pack();
                 ui.validate();
                 ui.setVisible(true);
