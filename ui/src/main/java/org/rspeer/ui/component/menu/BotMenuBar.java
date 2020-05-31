@@ -1,6 +1,7 @@
 package org.rspeer.ui.component.menu;
 
 import org.rspeer.environment.Environment;
+import org.rspeer.game.Game;
 import org.rspeer.ui.debug.explorer.itf.InterfaceExplorer;
 import org.rspeer.ui.locale.Message;
 import org.rspeer.ui.component.menu.script.ScriptMenu;
@@ -15,7 +16,7 @@ public class BotMenuBar extends JMenuBar {
         this.environment = environment;
         add(createFileMenu());
         add(createDebugMenu());
-        add(createOptionsMenu());
+        add(createWindowMenu());
         ScriptMenu sm = new ScriptMenu(environment);
         add(sm);
     }
@@ -26,16 +27,16 @@ public class BotMenuBar extends JMenuBar {
         return file;
     }
 
-    private JMenu createOptionsMenu() {
-        JMenu options = new JMenu(Message.WINDOW.getActive(environment.getPreferences()));
+    private JMenu createWindowMenu() {
+        JMenu window = new JMenu(Message.WINDOW.getActive(environment.getPreferences()));
 
         JCheckBoxMenuItem onTop = new JCheckBoxMenuItem(Message.ALWAYS_ON_TOP.getActive(environment.getPreferences()));
         onTop.addItemListener(act -> {
             environment.getBotContext().getFrame().setAlwaysOnTop(onTop.getState());
         });
 
-        options.add(onTop);
-        return options;
+        window.add(onTop);
+        return window;
     }
 
     private JMenu createDebugMenu() {
@@ -44,6 +45,10 @@ public class BotMenuBar extends JMenuBar {
         JMenuItem itfs = new JMenuItem("Interfaces");
         itfs.addActionListener(act -> new InterfaceExplorer(environment));
 
+        JCheckBoxMenuItem render = new JCheckBoxMenuItem("Render Scene", true);
+        render.addActionListener(act -> Game.getClient().setSceneRenderingEnabled(!render.isSelected()));
+
+        debug.add(render);
         debug.add(itfs);
 
         return debug;
