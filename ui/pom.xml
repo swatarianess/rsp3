@@ -28,13 +28,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
-            <version>0.20</version>
-            <scope>runtime</scope>
-        </dependency>
-
     </dependencies>
 
 

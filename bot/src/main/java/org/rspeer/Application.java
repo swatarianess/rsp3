@@ -1,7 +1,5 @@
 package org.rspeer;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import org.rspeer.environment.Environment;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
@@ -34,21 +32,8 @@ public class Application {
         GameLoader.load(true, Game::setClient);
 
         SwingUtilities.invokeLater(() -> {
-            try {
-                FlatLaf laf = new FlatLightLaf();
-                FlatLaf.install(laf);
-                UIManager.setLookAndFeel(laf);
-                System.setProperty("sun.awt.noerasebackground", "true");
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                JDialog.setDefaultLookAndFeelDecorated(true);
-
-                BotFrame ui = new BotFrame(environment);
-                ui.pack();
-                ui.validate();
-                ui.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            BotFrame ui = new BotFrame(environment);
+            ui.setVisible(true);
         });
     }
 }
