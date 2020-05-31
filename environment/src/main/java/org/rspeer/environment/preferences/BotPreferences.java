@@ -81,13 +81,13 @@ public class BotPreferences {
             return alwaysOnTop;
         }
 
-        public static void setPreferences(BotPreferences preferences) {
-            Window.preferences = preferences;
-        }
-
         public void setAlwaysOnTop(boolean alwaysOnTop) {
             this.alwaysOnTop = alwaysOnTop;
             save(preferences);
+        }
+
+        public static void setPreferences(BotPreferences preferences) {
+            Window.preferences = preferences;
         }
     }
 }
