@@ -18,12 +18,12 @@ public class Movement {
 
     public static void walkTowards(SceneNode destination) {
         Position dest = destination.getPosition().toScene();
-        int x = normalize(dest.getX());
-        int y = normalize(dest.getY());
+        int x = localize(dest.getX());
+        int y = localize(dest.getY());
         Game.queueAction(new WalkAction(ActionOpcode.WALK, x, y));
     }
 
-    private static int normalize(int value) {
+    private static int localize(int value) {
         if (value < 0) {
             return value;
         } else if (value > 103) {
@@ -48,7 +48,7 @@ public class Movement {
         if (Movement.isRunEnabled() == on) {
             return true;
         }
-        InterfaceComponent btn = Interfaces.getDirect(160, 22);
+        InterfaceComponent btn = Interfaces.getDirect(160, 22); //TODO address
         return btn != null && btn.interact(x -> true);
     }
 
