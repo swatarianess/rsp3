@@ -19,15 +19,6 @@ public class BotPreferences {
         return locale;
     }
 
-    private static void save(BotPreferences preferences) {
-        Gson gson = new Gson();
-        try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
-            gson.toJson(gson.toJsonTree(preferences), writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public Debug getDebug() {
         return debug;
     }
@@ -39,6 +30,15 @@ public class BotPreferences {
     public void setLocale(Locale locale) {
         this.locale = locale;
         save(this);
+    }
+
+    private static void save(BotPreferences preferences) {
+        Gson gson = new Gson();
+        try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
+            gson.toJson(gson.toJsonTree(preferences), writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class Debug {
