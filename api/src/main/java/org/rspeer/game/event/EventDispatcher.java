@@ -17,7 +17,7 @@ public class EventDispatcher {
         listeners.remove(el);
     }
 
-    public void dispatch(Event e) {
+    public void dispatch(Event<?> e) {
         for (EventListener listener : listeners) {
             e.dispatch(listener);
         }
