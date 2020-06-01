@@ -24,7 +24,7 @@ public abstract class BotWorker<T, V> extends SwingWorker<T, V> {
 
     @Override
     protected T doInBackground() throws Exception {
-        return doWork();
+        return work();
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class BotWorker<T, V> extends SwingWorker<T, V> {
         onFinish();
     }
 
-    protected abstract T doWork() throws Exception;
+    protected abstract T work() throws Exception;
 
     protected abstract void notify(V message);
 

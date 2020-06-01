@@ -1,24 +1,24 @@
 package org.rspeer.environment;
 
 import org.rspeer.environment.preferences.BotPreferences;
+import org.rspeer.game.script.ScriptController;
 
 /**
  * Bot environment
  */
 public class Environment {
 
-    //TODO naming maybe
-    private final ScriptContext scriptContext;
+    private final ScriptController scriptController;
     private final BotContext botContext;
     private BotPreferences preferences;
 
     public Environment() {
-        scriptContext = new ScriptContext();
+        scriptController = new ScriptController();
         botContext = new BotContext();
     }
 
-    public ScriptContext getScriptContext() {
-        return scriptContext;
+    public ScriptController getScriptController() {
+        return scriptController;
     }
 
     public BotContext getBotContext() {

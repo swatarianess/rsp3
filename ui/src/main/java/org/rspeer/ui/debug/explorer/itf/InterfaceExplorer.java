@@ -27,6 +27,7 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
     private static final int INFO_WIDTH = 360;
 
     private final JTree tree;
+
     private Object render = null;
     private Supplier<TreeModel> provider = new DefaultModelProvider();
 
@@ -45,7 +46,7 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
 
-        JCheckBoxMenuItem hierarchical = new JCheckBoxMenuItem("Hierarchical View", false);
+        JMenuItem hierarchical = new JCheckBoxMenuItem("Hierarchical View", false);
         add(hierarchical, BorderLayout.NORTH);
         hierarchical.addActionListener(x -> {
             provider = hierarchical.isSelected() ? new HierarchicalModelProvider() : new DefaultModelProvider();

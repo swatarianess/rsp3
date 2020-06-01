@@ -22,7 +22,7 @@ public class GameWorker extends BotWorker<RSClient, String> {
     }
 
     @Override
-    protected RSClient doWork() throws IOException {
+    protected RSClient work() throws IOException {
         publish("Loading RuneScape");
         GameLoader.load(true, Game::setClient);
         publish("Successfully loaded RuneScape");
@@ -42,6 +42,7 @@ public class GameWorker extends BotWorker<RSClient, String> {
             if (!environment.getPreferences().getDebug().isSceneRenderingEnabled()) {
                 ui.getBotMenuBar().getRenderScene().setSelected(false);
             }
+            
             if (environment.getPreferences().getDebug().isGameDebugRenderingEnabled()) {
                 ui.getBotMenuBar().getRenderGameDebug().setSelected(true);
             }

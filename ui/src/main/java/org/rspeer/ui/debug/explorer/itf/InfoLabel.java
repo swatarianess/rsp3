@@ -8,9 +8,9 @@ package org.rspeer.ui.debug.explorer.itf;
 
 import javax.swing.*;
 
-public class InfoLabel extends JTextArea {
+class InfoLabel extends JTextArea {
 
-    public InfoLabel(String text) {
+    InfoLabel(String text) {
         setRows(1);
         setEditable(false);
         setBackground(null);

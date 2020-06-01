@@ -33,7 +33,7 @@ public class ScriptMenu extends JMenu {
     }
 
     private void onReload(ActionEvent evt) {
-        environment.getScriptContext().getController().stop();
+        environment.getScriptController().stop();
 
         ScriptBundle bundle = loader.load();
         bundle.addAll(loader.predefined());
@@ -45,7 +45,7 @@ public class ScriptMenu extends JMenu {
         for (ScriptSource src : bundle) {
             JMenuItem item = new JMenuItem(src.getName());
             item.addActionListener((itemAct) -> {
-                environment.getScriptContext().getController().start(loader.define(src), src);
+                environment.getScriptController().start(loader.define(src), src);
                 addSeparator();
                 add(createStopItem());
             });
@@ -57,7 +57,7 @@ public class ScriptMenu extends JMenu {
     private JMenuItem createStopItem() {
         JMenuItem stop = new JMenuItem(Message.STOP.getActive(environment.getPreferences()));
         stop.addActionListener((act) -> {
-            environment.getScriptContext().getController().stop();
+            environment.getScriptController().stop();
             for (int i = getItemCount() - 1; i >= 0; i--) {
                 JMenuItem item = getItem(i);
                 remove(i);
