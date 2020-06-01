@@ -32,7 +32,7 @@ public class BotPreferences {
         save(this);
     }
 
-    private static void save(BotPreferences preferences) {
+    private static synchronized void save(BotPreferences preferences) {
         Gson gson = new Gson();
         try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
             gson.toJson(gson.toJsonTree(preferences), writer);
