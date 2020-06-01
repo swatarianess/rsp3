@@ -10,12 +10,11 @@ public class Environment {
     //TODO naming maybe
     private final ScriptContext scriptContext;
     private final BotContext botContext;
-    private final BotPreferences preferences;
+    private BotPreferences preferences;
 
     public Environment() {
         scriptContext = new ScriptContext();
         botContext = new BotContext();
-        preferences = new BotPreferences();
     }
 
     public ScriptContext getScriptContext() {
@@ -28,5 +27,9 @@ public class Environment {
 
     public BotPreferences getPreferences() {
         return preferences;
+    }
+
+    public void setPreferences(BotPreferences preferences) {
+        this.preferences = preferences;
     }
 }

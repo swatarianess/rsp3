@@ -1,12 +1,13 @@
 package org.rspeer;
 
+import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.game.Game;
-import org.rspeer.game.loader.GameLoader;
+import org.rspeer.environment.preferences.BotPreferences;
+import org.rspeer.environment.preferences.BotPreferencesLoader;
 import org.rspeer.ui.BotFrame;
+import org.rspeer.ui.worker.GameWorker;
 
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * Entry point for the application
@@ -28,12 +29,21 @@ public class Application {
         }
     }
 
-    public void start() throws IOException {
-        GameLoader.load(true, Game::setClient);
+    public void start() {
+        System.out.println("Loading ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
+        BotPreferencesLoader.load(true, preferences -> {
+            BotPreferences.Debug.setPreferences(preferences);
+            BotPreferences.Window.setPreferences(preferences);
+            environment.setPreferences(preferences);
+            System.out.println("Successfully loaded ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
+        });
 
         SwingUtilities.invokeLater(() -> {
             BotFrame ui = new BotFrame(environment);
             ui.setVisible(true);
+
+            GameWorker gameWorker = new GameWorker(environment, ui);
+            gameWorker.execute();
         });
     }
 }
