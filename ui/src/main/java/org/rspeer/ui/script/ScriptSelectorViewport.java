@@ -6,10 +6,10 @@ package org.rspeer.ui.script;
     Date: Tuesday - 06/02/2020
 */
 
+import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.ui.layout.WrapLayout;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ScriptSelectorViewport extends JPanel {
 
@@ -18,15 +18,12 @@ public class ScriptSelectorViewport extends JPanel {
 
     public ScriptSelectorViewport() {
         setLayout(new WrapLayout(WrapLayout.LEFT, HGAP, VGAP));
-        setBackground(Color.BLACK);
-
-        for (int i = 0; i < 14; i++) {
-            addScript();
-        }
     }
 
-    public void addScript() {
-        ScriptBox scriptBox = new ScriptBox();
-        add(scriptBox);
+    public void addScript(ScriptSource script) {
+        for (int i = 0; i < 10; i++) {
+            ScriptBox scriptBox = new ScriptBox(script);
+            add(scriptBox);
+        }
     }
 }

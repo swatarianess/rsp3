@@ -8,6 +8,7 @@ package org.rspeer.ui.script;
 
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
+import org.rspeer.game.script.loader.ScriptBundle;
 import org.rspeer.game.script.loader.local.LocalScriptLoader;
 import org.rspeer.ui.locale.Message;
 
@@ -34,16 +35,24 @@ public class ScriptSelector extends JFrame {
 
         this.environment = environment;
         this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
+        this.viewport = initializeViewport();
 
-        this.viewport = new ScriptSelectorViewport();
+        onReload();
+
+        pack();
+        setMinimumSize(getSize());
+        setLocationRelativeTo(environment.getBotContext().getFrame());
+    }
+
+    private ScriptSelectorViewport initializeViewport() {
+        ScriptSelectorViewport viewport = new ScriptSelectorViewport();
+
         JScrollPane viewportScrollPane = new JScrollPane(viewport);
         viewportScrollPane.getVerticalScrollBar().setUnitIncrement(5);
 
         int scrollBarMinWidth = viewportScrollPane.getVerticalScrollBar().getMinimumSize().width + 2;
-
         int hgap = ScriptSelectorViewport.HGAP;
         int vgap = ScriptSelectorViewport.VGAP;
-
         Dimension scrollpaneMinSize = new Dimension((ScriptBox.DEFAULT_WIDTH + hgap) * 3 + hgap + scrollBarMinWidth,
                                                     (ScriptBox.DEFAULT_HEIGHT + vgap) * 3 + vgap);
 
@@ -52,8 +61,21 @@ public class ScriptSelector extends JFrame {
 
         add(viewportScrollPane, BorderLayout.CENTER);
 
-        pack();
-        setMinimumSize(getSize());
-        setLocationRelativeTo(environment.getBotContext().getFrame());
+        return viewport;
+    }
+
+    private void onReload() {
+        environment.getScriptController().stop();
+
+        ScriptBundle bundle = loader.load();
+        bundle.addAll(loader.predefined());
+
+        viewport.removeAll();
+        bundle.forEach(viewport::addScript);
+
+        SwingUtilities.invokeLater(() -> {
+            JScrollPane scrollPane = (JScrollPane) viewport.getParent().getParent();
+            scrollPane.getVerticalScrollBar().setValue(0);
+        });
     }
 }
