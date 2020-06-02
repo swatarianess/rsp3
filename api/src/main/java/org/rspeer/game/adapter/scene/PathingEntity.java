@@ -140,10 +140,10 @@ public abstract class PathingEntity<P extends RSPathingEntity> extends Entity<P>
         if (index == -1) {
             return null;
         } else if (index < 32768) {
-            return Npcs.query().index(index).results().first();
+            return Npcs.query().indexes(index).results().first();
         }
         index -= 32768;
-        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.query().index(index).results().first();
+        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.query().indexes(index).results().first();
     }
 
     @Override

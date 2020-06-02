@@ -37,6 +37,6 @@ public class PlayerAction extends PathingEntityAction<Player> {
 
     @Override
     public Player getSource() {
-        return Players.query().index(getIndex()).results().first();
+        return Players.query().indexes(getIndex()).results().first();
     }
 }
