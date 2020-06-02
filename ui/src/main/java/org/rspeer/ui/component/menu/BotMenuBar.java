@@ -2,6 +2,8 @@ package org.rspeer.ui.component.menu;
 
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
+import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.game.Game;
 import org.rspeer.ui.component.menu.script.ScriptMenu;
 import org.rspeer.ui.debug.Debug;
@@ -26,8 +28,7 @@ public class BotMenuBar extends JMenuBar {
         this.environment = environment;
 
         debugEntries = new DebugEntry[]{
-                new DebugEntry(renderGameDebug = new JCheckBoxMenuItem("Game"), new GameDebug(),
-                               selected -> environment.getPreferences().getDebug().setGameDebugRenderingEnabled(selected))
+                new DebugEntry(renderGameDebug = new JCheckBoxMenuItem("Game"), new GameDebug())
         };
 
         add(createFileMenu());
@@ -47,10 +48,10 @@ public class BotMenuBar extends JMenuBar {
         JMenu window = new JMenu(Message.WINDOW.getActive(environment.getPreferences()));
 
         JMenuItem onTop = new JCheckBoxMenuItem(Message.ALWAYS_ON_TOP.getActive(environment.getPreferences()),
-                                                environment.getPreferences().getWindow().isAlwaysOnTop());
+                environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
         onTop.addItemListener(act -> {
             environment.getBotContext().getFrame().setAlwaysOnTop(onTop.isSelected());
-            environment.getPreferences().getWindow().setAlwaysOnTop(onTop.isSelected());
+            environment.getPreferences().set(AlwaysOnTopPreference.class, onTop.isSelected());
         });
 
         window.add(onTop);
@@ -65,9 +66,8 @@ public class BotMenuBar extends JMenuBar {
 
         renderScene = new JCheckBoxMenuItem("Render Scene", true);
         renderScene.addItemListener(evt -> {
-            //TODO: Remove the inversion once modscript gets updated
             Game.getClient().setSceneRenderingDisabled(!renderScene.isSelected());
-            environment.getPreferences().getDebug().setSceneRenderingEnabled(renderScene.isSelected());
+            environment.getPreferences().set(SceneRenderPreference.class, renderScene.isSelected());
         });
 
         for (DebugEntry entry : debugEntries) {

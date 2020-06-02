@@ -11,12 +11,12 @@ import org.rspeer.commons.Configuration;
 import javax.swing.*;
 import java.awt.*;
 
-public class WelcomePanel extends JPanel {
+public class Splash extends JPanel {
 
     private final JPanel content;
     private final JLabel message;
 
-    public WelcomePanel() {
+    public Splash() {
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(765, 503));
 

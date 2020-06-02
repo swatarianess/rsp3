@@ -1,93 +1,70 @@
 package org.rspeer.environment.preferences;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import org.rspeer.commons.Configuration;
+import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
+import org.rspeer.environment.preferences.type.BotPreference;
+import org.rspeer.environment.preferences.type.LocalePreference;
+import org.rspeer.environment.preferences.type.SceneRenderPreference;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
+@SuppressWarnings(value = "all")
 public class BotPreferences {
 
-    private final Debug debug = new Debug();
-    private final Window window = new Window();
+    static final Gson GSON;
 
-    private Locale locale = Locale.ENGLISH;
-
-    public Locale getLocale() {
-        return locale;
+    static {
+        GSON = new GsonBuilder().registerTypeAdapter(BotPreference.class, new BotPreferenceAdapter()).create();
     }
 
-    public Debug getDebug() {
-        return debug;
+    private final Map<String, BotPreference<?>> preferences;
+
+    public BotPreferences() {
+        preferences = new HashMap<>();
+        map(new LocalePreference());
+        map(new SceneRenderPreference());
+        map(new AlwaysOnTopPreference());
+
+        for (BotPreference preference : preferences.values()) {
+            preference.set(preference.getDefault());
+        }
     }
 
-    public Window getWindow() {
-        return window;
+    private void map(BotPreference<?> preference) {
+        preferences.put(preference.getClass().getName(), preference);
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-        save(this);
-    }
-
-    private static synchronized void save(BotPreferences preferences) {
-        Gson gson = new Gson();
+    public synchronized void save() {
         try (JsonWriter writer = new JsonWriter(new FileWriter(Configuration.Paths.PREFERENCES_LOCATION.toFile()))) {
-            gson.toJson(gson.toJsonTree(preferences), writer);
+            GSON.toJson(GSON.toJsonTree(this), writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static class Debug {
-
-        private static BotPreferences preferences;
-
-        private boolean renderGameDebug = false;
-        private boolean renderScene = true;
-
-        public boolean isGameDebugRenderingEnabled() {
-            return renderGameDebug;
+    public <T> T valueOf(Class<? extends BotPreference<T>> clazz) {
+        BotPreference<T> preference = (BotPreference<T>) preferences.get(clazz.getName());
+        if (preference == null) {
+            throw new IllegalArgumentException();
         }
 
-        public static void setPreferences(BotPreferences preferences) {
-            Debug.preferences = preferences;
-        }
-
-        public boolean isSceneRenderingEnabled() {
-            return renderScene;
-        }
-
-        public void setSceneRenderingEnabled(boolean enabled) {
-            this.renderScene = enabled;
-            save(preferences);
-        }
-
-        public void setGameDebugRenderingEnabled(boolean enabled) {
-            this.renderGameDebug = enabled;
-            save(preferences);
-        }
+        T value = preference.get();
+        return value != null ? value : preference.getDefault();
     }
 
-    public static class Window {
-
-        private static BotPreferences preferences;
-
-        private boolean alwaysOnTop = false;
-
-        public boolean isAlwaysOnTop() {
-            return alwaysOnTop;
+    public <T> void set(Class<? extends BotPreference<T>> clazz, T value) {
+        BotPreference<T> preference = (BotPreference<T>) preferences.get(clazz.getName());
+        if (preference == null) {
+            throw new IllegalArgumentException();
         }
 
-        public void setAlwaysOnTop(boolean alwaysOnTop) {
-            this.alwaysOnTop = alwaysOnTop;
-            save(preferences);
-        }
-
-        public static void setPreferences(BotPreferences preferences) {
-            Window.preferences = preferences;
-        }
+        preference.set(value);
+        preference.notify(this);
     }
 }

@@ -8,30 +8,29 @@ package org.rspeer.ui.worker;
 
 import jag.game.RSClient;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
 import org.rspeer.ui.BotFrame;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
-public class GameWorker extends BotWorker<RSClient, String> {
+public class LoadGameWorker extends BotWorker<RSClient, String> {
 
-    public GameWorker(Environment environment, BotFrame ui) {
+    public LoadGameWorker(Environment environment, BotFrame ui) {
         super(environment, ui);
     }
 
     @Override
     protected RSClient work() throws IOException {
-        publish("Loading RuneScape");
-        GameLoader.load(true, Game::setClient);
-        publish("Successfully loaded RuneScape");
-        return Game.getClient();
+        return GameLoader.load(true, new Callback());
     }
 
     @Override
     protected void notify(String message) {
-        ui.getWelcomePanel().setMessage(message);
+        ui.getSplash().setMessage(message);
     }
 
     @Override
@@ -39,15 +38,22 @@ public class GameWorker extends BotWorker<RSClient, String> {
         try {
             RSClient client = get();
             ui.setApplet(client.asApplet());
-            if (!environment.getPreferences().getDebug().isSceneRenderingEnabled()) {
-                ui.getBotMenuBar().getRenderScene().setSelected(false);
+            if (!environment.getPreferences().valueOf(SceneRenderPreference.class)) {
+                ui.getMenu().getRenderScene().setSelected(false);
             }
-            
-            if (environment.getPreferences().getDebug().isGameDebugRenderingEnabled()) {
-                ui.getBotMenuBar().getRenderGameDebug().setSelected(true);
-            }
+
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class Callback implements Consumer<RSClient> {
+
+        @Override
+        public void accept(RSClient client) {
+            publish("Loading RuneScape");
+            Game.setClient(client);
+            publish("Successfully loaded RuneScape");
         }
     }
 }

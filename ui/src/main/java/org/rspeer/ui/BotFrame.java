@@ -2,8 +2,9 @@ package org.rspeer.ui;
 
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.ui.component.menu.BotMenuBar;
-import org.rspeer.ui.component.welcome.WelcomePanel;
+import org.rspeer.ui.component.welcome.Splash;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,8 +16,8 @@ public class BotFrame extends JFrame {
 
     private final Environment environment;
 
-    private BotMenuBar botMenuBar;
-    private WelcomePanel welcomePanel;
+    private BotMenuBar menu;
+    private Splash splash;
 
     public BotFrame(Environment environment) {
         super(Configuration.getApplicationTitle());
@@ -42,15 +43,15 @@ public class BotFrame extends JFrame {
             e.printStackTrace();
         }
 
-        setAlwaysOnTop(environment.getPreferences().getWindow().isAlwaysOnTop());
+        setAlwaysOnTop(environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        welcomePanel = new WelcomePanel();
-        add(welcomePanel, BorderLayout.CENTER);
+        splash = new Splash();
+        add(splash, BorderLayout.CENTER);
 
-        botMenuBar = new BotMenuBar(environment);
-        setJMenuBar(botMenuBar);
+        menu = new BotMenuBar(environment);
+        setJMenuBar(menu);
 
         environment.getBotContext().setFrame(this);
 
@@ -62,8 +63,8 @@ public class BotFrame extends JFrame {
     }
 
     public void setApplet(Applet applet) {
-        if (welcomePanel != null) {
-            welcomePanel = null;
+        if (splash != null) {
+            splash = null;
         }
         BorderLayout layout = (BorderLayout) getContentPane().getLayout();
         Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
@@ -71,11 +72,11 @@ public class BotFrame extends JFrame {
         add(applet, BorderLayout.CENTER);
     }
 
-    public BotMenuBar getBotMenuBar() {
-        return botMenuBar;
+    public BotMenuBar getMenu() {
+        return menu;
     }
 
-    public WelcomePanel getWelcomePanel() {
-        return welcomePanel;
+    public Splash getSplash() {
+        return splash;
     }
 }

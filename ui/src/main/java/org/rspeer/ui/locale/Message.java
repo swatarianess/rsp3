@@ -2,6 +2,7 @@ package org.rspeer.ui.locale;
 
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.preferences.BotPreferences;
+import org.rspeer.environment.preferences.type.LocalePreference;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,7 +47,7 @@ public enum Message {
     }
 
     public String getActive(BotPreferences prefs) {
-        return get(prefs.getLocale());
+        return get(prefs.valueOf(LocalePreference.class));
     }
 
     public String get(Locale locale) {

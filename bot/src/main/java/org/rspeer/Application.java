@@ -2,10 +2,10 @@ package org.rspeer;
 
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.environment.preferences.BotPreferencesLoader;
+import org.rspeer.environment.preferences.JsonBotPreferencesLoader;
 import org.rspeer.ui.BotFrame;
-import org.rspeer.ui.worker.GameWorker;
+import org.rspeer.ui.worker.LoadGameWorker;
 
 import javax.swing.*;
 
@@ -30,20 +30,20 @@ public class Application {
     }
 
     public void start() {
-        System.out.println("Loading ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
-        BotPreferencesLoader.load(true, preferences -> {
-            BotPreferences.Debug.setPreferences(preferences);
-            BotPreferences.Window.setPreferences(preferences);
+        System.out.printf("Loading %s preferences%n", Configuration.getApplicationTitle());
+
+        BotPreferencesLoader preferencesLoader = new JsonBotPreferencesLoader();
+        preferencesLoader.load(preferences -> {
             environment.setPreferences(preferences);
-            System.out.println("Successfully loaded ".concat(Configuration.getApplicationTitle()).concat(" preferences"));
+            System.out.printf("Successfully loaded %s preferences%n", Configuration.getApplicationTitle());
         });
 
         SwingUtilities.invokeLater(() -> {
             BotFrame ui = new BotFrame(environment);
             ui.setVisible(true);
 
-            GameWorker gameWorker = new GameWorker(environment, ui);
-            gameWorker.execute();
+            LoadGameWorker loader = new LoadGameWorker(environment, ui);
+            loader.execute();
         });
     }
 }
