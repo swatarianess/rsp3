@@ -1,8 +1,8 @@
 package org.rspeer.environment.preferences.event;
 
 import org.rspeer.environment.preferences.type.BotPreference;
-import org.rspeer.game.event.Event;
-import org.rspeer.game.event.listener.EventListener;
+import org.rspeer.event.Event;
+import org.rspeer.event.listener.EventListener;
 
 public class PreferenceEvent extends Event<BotPreference<?>> {
 

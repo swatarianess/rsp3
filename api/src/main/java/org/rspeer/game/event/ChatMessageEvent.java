@@ -1,8 +1,9 @@
 package org.rspeer.game.event;
 
 import org.rspeer.commons.StringCommons;
+import org.rspeer.event.Event;
 import org.rspeer.game.event.listener.ChatMessageListener;
-import org.rspeer.game.event.listener.EventListener;
+import org.rspeer.event.listener.EventListener;
 
 public class ChatMessageEvent extends Event<String> {
 

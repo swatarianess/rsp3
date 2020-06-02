@@ -9,9 +9,9 @@ public class BotPreferenceAdapter implements JsonDeserializer<BotPreference<?>>,
 
     @Override
     public BotPreference<?> deserialize(JsonElement elem, Type type, JsonDeserializationContext ctx) throws JsonParseException {
-        JsonObject jsonObject = elem.getAsJsonObject();
-        String def = jsonObject.get("type").getAsString();
-        JsonElement element = jsonObject.get("value");
+        JsonObject object = elem.getAsJsonObject();
+        String def = object.get("type").getAsString();
+        JsonElement element = object.get("value");
 
         try {
             return ctx.deserialize(element, Class.forName(def));
