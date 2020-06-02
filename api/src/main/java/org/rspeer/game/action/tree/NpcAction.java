@@ -37,6 +37,6 @@ public class NpcAction extends PathingEntityAction<Npc> {
 
     @Override
     public Npc getSource() {
-        return Npcs.getAt(getIndex());
+        return Npcs.query().index(getIndex()).results().first();
     }
 }

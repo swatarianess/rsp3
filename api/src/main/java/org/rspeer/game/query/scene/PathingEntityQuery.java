@@ -31,6 +31,8 @@ public abstract class PathingEntityQuery<
     private int[] animations = null;
     private int[] stances = null;
 
+    private int index = -1;
+
     private PathingEntity[] targeters = null;
     private PathingEntity[] targets = null;
 
@@ -119,6 +121,11 @@ public abstract class PathingEntityQuery<
         return self();
     }
 
+    public Q index(int index) {
+        this.index = index;
+        return self();
+    }
+
     @Override
     public Q moving() {
         moving = true;
@@ -190,6 +197,10 @@ public abstract class PathingEntityQuery<
         }
 
         if (targeted != null && hasTargeters(e) != targeted) {
+            return false;
+        }
+
+        if (index != -1 && e.getIndex() != index) {
             return false;
         }
 
