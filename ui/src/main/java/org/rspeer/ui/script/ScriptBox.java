@@ -30,6 +30,7 @@ public class ScriptBox extends JPanel {
 
     private void initializeComponents(ScriptSource script) {
         setBorder(new TitledBorder(script.getName()));
+
         ScriptButton button = new ScriptButton(script);
         button.setBorder(null);
 
@@ -41,12 +42,22 @@ public class ScriptBox extends JPanel {
         add(button, constraints);
     }
 
-    private class ScriptButton extends JButton {
+    /*
+        Static just to make it clear that we're referring to ScriptButton
+                     when calling getWidth(), getHeight(), etc.
+     */
+    private static class ScriptButton extends JButton {
 
         private final ScriptSource script;
+        private final Insets insets;
+
+        private final static int gap = 3;
+        private final static int inset = 6;
+        private final static int vgap = gap - 3;
 
         public ScriptButton(ScriptSource script) {
             this.script = script;
+            this.insets = new Insets(inset - 3, inset + 2, inset + 4, inset + 2);
         }
 
         @Override
@@ -58,10 +69,30 @@ public class ScriptBox extends JPanel {
         }
 
         private void paintCustom(Graphics2D g) {
-            String developer = "Developer ".concat(script.getDeveloper());
-            int width = g.getFontMetrics().stringWidth(developer);
-            int height = g.getFontMetrics().getHeight();
-            g.drawString(developer, (getWidth() / 2) - width / 2, (getHeight() / 2) + height / 2);
+            int bottomY = getHeight() - insets.bottom;
+
+            Font plain = g.getFont();
+            Font bold = plain.deriveFont(Font.BOLD);
+
+            g.setFont(bold);
+            String developer = "Developer: ";
+
+            int developerWidth = g.getFontMetrics().stringWidth(developer);
+            int developerHeight = g.getFontMetrics().getHeight();
+
+            g.drawString(developer, insets.left, bottomY);
+            g.setFont(plain);
+            g.drawString(script.getDeveloper(), developerWidth + insets.left, bottomY);
+
+            g.setFont(bold);
+            String version = "Version: ";
+            int versionWidth = g.getFontMetrics().stringWidth(version);
+
+            bottomY = bottomY - developerHeight - vgap;
+
+            g.drawString(version, insets.left, bottomY);
+            g.setFont(plain);
+            g.drawString(String.valueOf(script.getVersion()), versionWidth + insets.left, bottomY);
         }
     }
 }

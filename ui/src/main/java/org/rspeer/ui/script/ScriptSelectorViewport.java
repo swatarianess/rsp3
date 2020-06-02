@@ -21,9 +21,6 @@ public class ScriptSelectorViewport extends JPanel {
     }
 
     public void addScript(ScriptSource script) {
-        for (int i = 0; i < 10; i++) {
-            ScriptBox scriptBox = new ScriptBox(script);
-            add(scriptBox);
-        }
+        add(new ScriptBox(script));
     }
 }
