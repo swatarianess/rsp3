@@ -27,13 +27,17 @@ public class ScriptMenu extends JMenu {
 
     private void openScriptSelector(ActionEvent actionEvent) {
         if (scriptSelector == null) {
-            scriptSelector = new ScriptSelector(environment);
+            scriptSelector = new ScriptSelector(environment, this);
             scriptSelector.setVisible(true);
         } else {
             scriptSelector.setLocationRelativeTo(environment.getBotContext().getFrame());
             scriptSelector.setState(JFrame.ICONIFIED);
             scriptSelector.setState(JFrame.NORMAL);
         }
+    }
+
+    public void nullifyScriptSelector() {
+        scriptSelector = null;
     }
 
     private JMenuItem createStopItem() {
