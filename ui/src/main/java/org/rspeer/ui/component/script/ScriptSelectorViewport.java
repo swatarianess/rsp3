@@ -1,4 +1,4 @@
-package org.rspeer.ui.script;
+package org.rspeer.ui.component.script;
 
 /*
     Author: zScorpio
@@ -9,7 +9,7 @@ package org.rspeer.ui.script;
 import org.rspeer.environment.Environment;
 import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.ui.component.menu.script.ScriptMenu;
-import org.rspeer.ui.layout.WrapLayout;
+import org.rspeer.ui.component.layout.WrapLayout;
 
 import javax.swing.*;
 

@@ -4,7 +4,7 @@ import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.ui.component.menu.BotMenuBar;
-import org.rspeer.ui.component.welcome.Splash;
+import org.rspeer.ui.component.splash.Splash;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

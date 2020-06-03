@@ -3,7 +3,7 @@ package org.rspeer.ui.component.menu.script;
 import org.rspeer.environment.Environment;
 import org.rspeer.game.script.ScriptMeta;
 import org.rspeer.ui.locale.Message;
-import org.rspeer.ui.script.ScriptSelector;
+import org.rspeer.ui.component.script.ScriptSelector;
 
 import javax.swing.*;
 import java.awt.*;

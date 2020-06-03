@@ -1,4 +1,4 @@
-package org.rspeer.ui.component.welcome;
+package org.rspeer.ui.component.splash;
 
 /*
     Author: zScorpio

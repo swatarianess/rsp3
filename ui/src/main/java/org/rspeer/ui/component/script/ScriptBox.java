@@ -1,4 +1,4 @@
-package org.rspeer.ui.script;
+package org.rspeer.ui.component.script;
 
 /*
     Author: zScorpio

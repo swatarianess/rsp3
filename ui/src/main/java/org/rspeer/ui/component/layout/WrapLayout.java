@@ -1,4 +1,4 @@
-package org.rspeer.ui.layout;
+package org.rspeer.ui.component.layout;
 
 import javax.swing.*;
 import java.awt.*;
