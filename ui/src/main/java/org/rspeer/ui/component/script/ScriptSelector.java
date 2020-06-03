@@ -8,84 +8,85 @@ package org.rspeer.ui.component.script;
 
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
+import org.rspeer.event.Event;
+import org.rspeer.game.script.Script;
 import org.rspeer.game.script.loader.ScriptBundle;
-import org.rspeer.game.script.loader.ScriptProvider;
+import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.game.script.loader.local.LocalScriptLoader;
-import org.rspeer.ui.component.menu.script.ScriptMenu;
+import org.rspeer.ui.Window;
+import org.rspeer.ui.component.layout.WrapLayout;
+import org.rspeer.ui.component.menu.BotToolBar.StartButton;
 import org.rspeer.ui.locale.Message;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-public class ScriptSelector extends JFrame {
+public class ScriptSelector extends Window<JDialog> {
 
     private final Environment environment;
-    private final ScriptMenu menu;
-    private final ScriptSelectorViewport viewport;
+    private final Viewport viewport;
     private final LocalScriptLoader loader;
+    private final StartButton control;
 
-    public ScriptSelector(Environment environment, ScriptMenu menu) {
-        super(Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()));
+    public ScriptSelector(JFrame parent, Environment environment, StartButton control) {
+        super(new JDialog(parent, Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()), true));
+
+        this.environment = environment;
+        this.viewport = initializeViewport();
+        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
+        this.control = control;
 
         try {
-            setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
+            frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.environment = environment;
-        this.menu = menu;
-        this.viewport = initializeViewport();
-        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
+        reload();
 
-        onReload();
-
-        pack();
-        setMinimumSize(getSize());
-        setLocationRelativeTo(environment.getBotContext().getFrame());
-        setVisible(true);
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
+        frame.setLocationRelativeTo(environment.getBotContext().getFrame());
     }
 
-    public ScriptProvider getLoader() {
-        return loader;
-    }
+    private Viewport initializeViewport() {
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    private ScriptSelectorViewport initializeViewport() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Viewport viewport = new Viewport(environment);
 
-        ScriptSelectorViewport viewport = new ScriptSelectorViewport(environment, menu);
+        JScrollPane scroll = new JScrollPane(viewport);
+        scroll.getVerticalScrollBar().setUnitIncrement(5);
 
-        JScrollPane viewportScrollPane = new JScrollPane(viewport);
-        viewportScrollPane.getVerticalScrollBar().setUnitIncrement(5);
+        int minw = scroll.getVerticalScrollBar().getMinimumSize().width + 2;
+        int hgap = Viewport.HGAP;
+        int vgap = Viewport.VGAP;
 
-        int scrollBarMinWidth = viewportScrollPane.getVerticalScrollBar().getMinimumSize().width + 2;
-        int hgap = ScriptSelectorViewport.HGAP;
-        int vgap = ScriptSelectorViewport.VGAP;
-        Dimension scrollpaneMinSize = new Dimension((ScriptBox.DEFAULT_WIDTH + hgap) * 3 + hgap + scrollBarMinWidth,
-                                                    (ScriptBox.DEFAULT_HEIGHT + vgap) * 3 + vgap);
-        viewportScrollPane.setMinimumSize(scrollpaneMinSize);
-        viewportScrollPane.setPreferredSize(scrollpaneMinSize);
-        viewportScrollPane.setBorder(null);
+        Dimension minSize = new Dimension(
+                (ScriptBox.DEFAULT_WIDTH + hgap) * 3 + hgap + minw,
+                (ScriptBox.DEFAULT_HEIGHT + vgap) * 3 + vgap
+        );
 
-        add(viewportScrollPane, BorderLayout.CENTER);
+        scroll.setMinimumSize(minSize);
+        scroll.setPreferredSize(minSize);
+        scroll.setBorder(null);
 
-        addWindowListener(new WindowAdapter() {
+        frame.add(scroll, BorderLayout.CENTER);
+        frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                menu.destroyScriptSelector();
             }
         });
-
         return viewport;
     }
 
-    private void onReload() {
+    private void reload() {
         SwingWorker<ScriptBundle, Void> worker = new SwingWorker<ScriptBundle, Void>() {
             @Override
             protected ScriptBundle doInBackground() {
@@ -100,7 +101,7 @@ public class ScriptSelector extends JFrame {
                     ScriptBundle bundle = get();
 
                     viewport.removeAll();
-                    bundle.forEach(viewport::addScript);
+                    bundle.forEach(viewport::addBox);
                     viewport.revalidate();
 
                     JScrollPane scrollPane = (JScrollPane) viewport.getParent().getParent();
@@ -111,5 +112,132 @@ public class ScriptSelector extends JFrame {
             }
         };
         worker.execute();
+    }
+
+    @Override
+    public void display() {
+        frame.setVisible(true);
+    }
+
+    @Override
+    public void dispose() {
+        frame.dispose();
+    }
+
+    @Override
+    public <T extends Event<?>> void accept(T event) {
+
+    }
+
+    /*
+            Static just to make it clear that we're referring to ScriptButton
+                         when calling getWidth(), getHeight(), etc.
+         */
+    private static class ScriptButton extends JButton {
+
+        private static final int GAP = 3;
+        private static final int INSET = 6;
+        private static final int VGAP = GAP - 3;
+        private final ScriptSource script;
+        private final Insets insets;
+
+        public ScriptButton(ScriptSource script) {
+            this.script = script;
+            this.insets = new Insets(INSET - 3, INSET + 2, INSET + 4, INSET + 2);
+        }
+
+        @Override
+        public void paint(Graphics g2) {
+            super.paint(g2);
+            Graphics2D g = (Graphics2D) g2;
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+            paintCustom(g);
+        }
+
+        private void paintCustom(Graphics2D g) {
+            int bottomY = getHeight() - insets.bottom;
+
+            Font plain = g.getFont();
+            Font bold = plain.deriveFont(Font.BOLD);
+
+            g.setFont(bold);
+            String developer = "Developer: ";
+
+            int developerWidth = g.getFontMetrics().stringWidth(developer);
+            int developerHeight = g.getFontMetrics().getHeight();
+
+            g.drawString(developer, insets.left, bottomY);
+            g.setFont(plain);
+            g.drawString(script.getDeveloper(), developerWidth + insets.left, bottomY);
+
+            g.setFont(bold);
+            String version = "Version: ";
+            int versionWidth = g.getFontMetrics().stringWidth(version);
+
+            bottomY = bottomY - developerHeight - VGAP;
+
+            g.drawString(version, insets.left, bottomY);
+            g.setFont(plain);
+            g.drawString(String.valueOf(script.getVersion()), versionWidth + insets.left, bottomY);
+        }
+    }
+
+    public class ScriptBox extends JPanel {
+
+        public static final int DEFAULT_WIDTH = 200;
+        public static final int DEFAULT_HEIGHT = 100;
+
+        private final Environment environment;
+        private final ScriptSource source;
+
+        public ScriptBox(Environment environment, ScriptSource source) {
+            this.environment = environment;
+            this.source = source;
+
+            setLayout(new GridBagLayout());
+            setMinimumSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+            setMaximumSize(getMinimumSize());
+            setPreferredSize(getMinimumSize());
+
+            initializeComponents();
+        }
+
+        private void initializeComponents() {
+            setBorder(new TitledBorder(source.getName()));
+
+            ScriptButton button = new ScriptButton(source);
+            button.setBorder(null);
+
+            button.addActionListener(act -> {
+                Script script = loader.define(source);
+                environment.getScriptController().start(script);
+                control.setText("Stop");
+                dispose();
+            });
+
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.weightx = 1;
+            constraints.weighty = 1;
+            constraints.fill = GridBagConstraints.BOTH;
+
+            add(button, constraints);
+        }
+    }
+
+    private class Viewport extends JPanel {
+
+        private static final int HGAP = 4;
+        private static final int VGAP = 4;
+
+        private final Environment environment;
+
+        private Viewport(Environment environment) {
+            this.environment = environment;
+            setLayout(new WrapLayout(WrapLayout.LEFT, HGAP, VGAP));
+        }
+
+        private void addBox(ScriptSource source) {
+            add(new ScriptBox(environment, source));
+        }
     }
 }

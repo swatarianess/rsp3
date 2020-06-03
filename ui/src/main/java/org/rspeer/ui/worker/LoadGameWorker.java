@@ -15,13 +15,14 @@ import org.rspeer.ui.Window;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class LoadGameWorker extends BotWorker<RSClient, String> {
 
-    public LoadGameWorker(Environment environment, Window window) {
+    public LoadGameWorker(Environment environment, Window<JFrame> window) {
         super(environment, window);
     }
 

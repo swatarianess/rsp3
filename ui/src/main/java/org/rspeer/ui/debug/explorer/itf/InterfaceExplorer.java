@@ -6,7 +6,6 @@ import org.rspeer.game.Game;
 import org.rspeer.game.component.Interfaces;
 import org.rspeer.game.event.RenderEvent;
 import org.rspeer.game.event.listener.RenderListener;
-import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.locale.Message;
 
 import javax.imageio.ImageIO;
@@ -27,13 +26,12 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
     private static final int VIEWPORT_WIDTH = 220;
     private static final int INFO_WIDTH = 360;
 
-    private final BotMenuBar menuBar;
     private final JTree tree;
 
     private Object render = null;
     private Supplier<TreeModel> provider = new DefaultModelProvider();
 
-    public InterfaceExplorer(Environment environment, BotMenuBar menuBar) {
+    public InterfaceExplorer(Environment environment) {
         super(Message.INTERFACE_EXPLORER.getActive(environment.getPreferences()));
 
         try {
@@ -44,7 +42,6 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
 
         setLayout(new BorderLayout());
 
-        this.menuBar = menuBar;
         this.tree = new JTree();
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
@@ -77,7 +74,6 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 Game.getEventDispatcher().unsubscribe(InterfaceExplorer.this);
-                menuBar.destroyInterfaceExplorer();
             }
         });
 

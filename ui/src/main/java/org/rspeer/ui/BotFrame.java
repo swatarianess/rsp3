@@ -5,6 +5,7 @@ import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.event.Event;
 import org.rspeer.ui.component.menu.BotMenuBar;
+import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
@@ -15,7 +16,7 @@ import java.applet.Applet;
 import java.awt.*;
 import java.io.IOException;
 
-public class BotFrame extends Window {
+public class BotFrame extends Window<JFrame> {
 
     private final Environment environment;
 
@@ -55,6 +56,7 @@ public class BotFrame extends Window {
 
         menu = new BotMenuBar(environment);
         frame.setJMenuBar(menu);
+        frame.add(new BotToolBar(environment), BorderLayout.NORTH);
 
         environment.getBotContext().setFrame(frame);
 

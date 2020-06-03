@@ -40,7 +40,7 @@ public class Application {
         });
 
         SwingUtilities.invokeLater(() -> {
-            Window ui = new BotFrame(environment);
+            Window<JFrame> ui = new BotFrame(environment);
             ui.display();
 
             LoadGameWorker loader = new LoadGameWorker(environment, ui);

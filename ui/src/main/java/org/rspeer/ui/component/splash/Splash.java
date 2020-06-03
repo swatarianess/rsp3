@@ -23,7 +23,7 @@ public class Splash extends JPanel {
         content = new JPanel(new GridBagLayout());
         content.setBackground(Color.BLACK);
 
-        message = new JLabel("Loading" + Configuration.getApplicationTitle());
+        message = new JLabel("Loading " + Configuration.getApplicationTitle());
         message.setForeground(Color.WHITE);
 
         content.add(message);
