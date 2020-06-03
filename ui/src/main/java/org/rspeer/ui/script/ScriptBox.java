@@ -6,7 +6,10 @@ package org.rspeer.ui.script;
     Date: Tuesday - 06/02/2020
 */
 
+import org.rspeer.environment.Environment;
+import org.rspeer.game.script.Script;
 import org.rspeer.game.script.loader.ScriptSource;
+import org.rspeer.ui.component.menu.script.ScriptMenu;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -17,22 +20,36 @@ public class ScriptBox extends JPanel {
     public static final int DEFAULT_WIDTH = 200;
     public static final int DEFAULT_HEIGHT = 100;
 
-    public ScriptBox(ScriptSource script) {
-        super();
-        setLayout(new GridBagLayout());
+    private final Environment environment;
+    private final ScriptMenu menu;
+    private final ScriptSource source;
 
+    public ScriptBox(Environment environment, ScriptMenu menu, ScriptSource source) {
+        super();
+
+        this.environment = environment;
+        this.menu = menu;
+        this.source = source;
+
+        setLayout(new GridBagLayout());
         setMinimumSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setMaximumSize(getMinimumSize());
         setPreferredSize(getMinimumSize());
 
-        initializeComponents(script);
+        initializeComponents();
     }
 
-    private void initializeComponents(ScriptSource script) {
-        setBorder(new TitledBorder(script.getName()));
+    private void initializeComponents() {
+        setBorder(new TitledBorder(source.getName()));
 
-        ScriptButton button = new ScriptButton(script);
+        ScriptButton button = new ScriptButton(source);
         button.setBorder(null);
+
+        button.addActionListener(act -> {
+            Script script = menu.getSelector().getLoader().define(source);
+            environment.getScriptController().start(script);
+            menu.onStart();
+        });
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;

@@ -9,6 +9,7 @@ package org.rspeer.ui.script;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.game.script.loader.ScriptBundle;
+import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.local.LocalScriptLoader;
 import org.rspeer.ui.component.menu.script.ScriptMenu;
 import org.rspeer.ui.locale.Message;
@@ -22,13 +23,12 @@ import java.io.IOException;
 
 public class ScriptSelector extends JFrame {
 
-    private final LocalScriptLoader loader;
     private final Environment environment;
-
-    private final ScriptMenu scriptMenu;
+    private final ScriptMenu menu;
     private final ScriptSelectorViewport viewport;
+    private final LocalScriptLoader loader;
 
-    public ScriptSelector(Environment environment, ScriptMenu scriptMenu) {
+    public ScriptSelector(Environment environment, ScriptMenu menu) {
         super(Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()));
 
         try {
@@ -38,9 +38,9 @@ public class ScriptSelector extends JFrame {
         }
 
         this.environment = environment;
-        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
-        this.scriptMenu = scriptMenu;
+        this.menu = menu;
         this.viewport = initializeViewport();
+        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
 
         onReload();
 
@@ -49,10 +49,14 @@ public class ScriptSelector extends JFrame {
         setLocationRelativeTo(environment.getBotContext().getFrame());
     }
 
+    public ScriptProvider getLoader() {
+        return loader;
+    }
+
     private ScriptSelectorViewport initializeViewport() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        ScriptSelectorViewport viewport = new ScriptSelectorViewport();
+        ScriptSelectorViewport viewport = new ScriptSelectorViewport(environment, menu);
 
         JScrollPane viewportScrollPane = new JScrollPane(viewport);
         viewportScrollPane.getVerticalScrollBar().setUnitIncrement(5);
@@ -72,7 +76,7 @@ public class ScriptSelector extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                scriptMenu.nullifyScriptSelector();
+                menu.nullifyScriptSelector();
             }
         });
 
@@ -80,8 +84,6 @@ public class ScriptSelector extends JFrame {
     }
 
     private void onReload() {
-        environment.getScriptController().stop();
-
         ScriptBundle bundle = loader.load();
         bundle.addAll(loader.predefined());
 
