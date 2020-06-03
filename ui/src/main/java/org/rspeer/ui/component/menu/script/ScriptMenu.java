@@ -22,7 +22,7 @@ public class ScriptMenu extends JMenu {
         this.initializeMenuItems();
     }
 
-    public void nullifyScriptSelector() {
+    public void destroyScriptSelector() {
         selector = null;
     }
 

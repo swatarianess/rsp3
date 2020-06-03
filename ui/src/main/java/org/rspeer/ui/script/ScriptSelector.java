@@ -78,7 +78,7 @@ public class ScriptSelector extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
-                menu.nullifyScriptSelector();
+                menu.destroyScriptSelector();
             }
         });
 
