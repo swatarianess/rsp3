@@ -5,6 +5,7 @@ import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.BotPreferencesLoader;
 import org.rspeer.environment.preferences.JsonBotPreferencesLoader;
 import org.rspeer.ui.BotFrame;
+import org.rspeer.ui.Window;
 import org.rspeer.ui.worker.LoadGameWorker;
 
 import javax.swing.*;
@@ -39,8 +40,8 @@ public class Application {
         });
 
         SwingUtilities.invokeLater(() -> {
-            BotFrame ui = new BotFrame(environment);
-            ui.setVisible(true);
+            Window ui = new BotFrame(environment);
+            ui.display();
 
             LoadGameWorker loader = new LoadGameWorker(environment, ui);
             loader.execute();

@@ -7,7 +7,7 @@ package org.rspeer.ui.worker;
 */
 
 import org.rspeer.environment.Environment;
-import org.rspeer.ui.BotFrame;
+import org.rspeer.ui.Window;
 
 import javax.swing.*;
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.List;
 public abstract class BotWorker<T, V> extends SwingWorker<T, V> {
 
     protected final Environment environment;
-    protected final BotFrame ui;
+    protected final Window window;
 
-    public BotWorker(Environment environment, BotFrame ui) {
+    public BotWorker(Environment environment, Window window) {
         this.environment = environment;
-        this.ui = ui;
+        this.window = window;
     }
 
     @Override

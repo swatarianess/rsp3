@@ -3,8 +3,11 @@ package org.rspeer.ui;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
+import org.rspeer.event.Event;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.splash.Splash;
+import org.rspeer.ui.event.SetAppletEvent;
+import org.rspeer.ui.event.SplashEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +15,7 @@ import java.applet.Applet;
 import java.awt.*;
 import java.io.IOException;
 
-public class BotFrame extends JFrame {
+public class BotFrame extends Window {
 
     private final Environment environment;
 
@@ -20,7 +23,7 @@ public class BotFrame extends JFrame {
     private Splash splash;
 
     public BotFrame(Environment environment) {
-        super(Configuration.getApplicationTitle());
+        super(new JFrame(Configuration.getApplicationTitle()));
         this.environment = environment;
         applyDefaults();
         applyComponents();
@@ -38,27 +41,27 @@ public class BotFrame extends JFrame {
 
     private void applyComponents() {
         try {
-            setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
+            frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        setAlwaysOnTop(environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
+        frame.setAlwaysOnTop(environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         splash = new Splash();
-        add(splash, BorderLayout.CENTER);
+        frame.add(splash, BorderLayout.CENTER);
 
         menu = new BotMenuBar(environment);
-        setJMenuBar(menu);
+        frame.setJMenuBar(menu);
 
-        environment.getBotContext().setFrame(this);
+        environment.getBotContext().setFrame(frame);
 
-        pack();
-        setLocationRelativeTo(null);
-        setMinimumSize(getSize());
-        validate();
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setMinimumSize(frame.getSize());
+        frame.validate();
         //TODO: Implement logger & save its show/hide state in the preferences file
     }
 
@@ -66,17 +69,30 @@ public class BotFrame extends JFrame {
         if (splash != null) {
             splash = null;
         }
-        BorderLayout layout = (BorderLayout) getContentPane().getLayout();
+        BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
         Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-        remove(previousComp);
-        add(applet, BorderLayout.CENTER);
+        frame.remove(previousComp);
+        frame.add(applet, BorderLayout.CENTER);
     }
 
-    public BotMenuBar getMenu() {
-        return menu;
+    @Override
+    public void display() {
+        frame.setVisible(true);
     }
 
-    public Splash getSplash() {
-        return splash;
+    @Override
+    public void dispose() {
+        frame.dispose();
+    }
+
+    @Override
+    public <T extends Event<?>> void accept(T e) {
+        if (e instanceof SplashEvent) {
+            SplashEvent event = (SplashEvent) e;
+            splash.setMessage(event.getMessage());
+        } else if (e instanceof SetAppletEvent) {
+            SetAppletEvent event = (SetAppletEvent) e;
+            setApplet(event.getApplet());
+        }
     }
 }

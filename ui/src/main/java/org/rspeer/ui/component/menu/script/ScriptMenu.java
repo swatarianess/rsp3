@@ -34,7 +34,7 @@ public class ScriptMenu extends JMenu {
         selector.dispose();
         selectorMenuItem.setEnabled(false);
 
-        ScriptMeta meta = environment.getScriptController().getCurrent().getMeta();
+        ScriptMeta meta = environment.getScriptController().getActive().getMeta();
         String scriptText = String.format("%s v%s by %s", meta.name(), meta.version(), meta.developer());
         selectorMenuItem.setText(scriptText);
 
