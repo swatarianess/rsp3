@@ -48,6 +48,7 @@ public class ScriptSelector extends JFrame {
         pack();
         setMinimumSize(getSize());
         setLocationRelativeTo(environment.getBotContext().getFrame());
+        setVisible(true);
     }
 
     public ScriptProvider getLoader() {

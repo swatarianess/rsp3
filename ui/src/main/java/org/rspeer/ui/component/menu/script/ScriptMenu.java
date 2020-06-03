@@ -69,7 +69,6 @@ public class ScriptMenu extends JMenu {
     private void openScriptSelector(ActionEvent actionEvent) {
         if (selector == null) {
             selector = new ScriptSelector(environment, this);
-            selector.setVisible(true);
         } else {
             selector.setLocationRelativeTo(environment.getBotContext().getFrame());
             selector.setState(JFrame.ICONIFIED);
