@@ -12,6 +12,7 @@ import org.rspeer.ui.debug.explorer.itf.InterfaceExplorer;
 import org.rspeer.ui.locale.Message;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
 
 public class BotMenuBar extends JMenuBar {
@@ -23,6 +24,7 @@ public class BotMenuBar extends JMenuBar {
 
     //TODO: Move renderScene to another JMenu
     private JCheckBoxMenuItem renderScene;
+    private InterfaceExplorer interfaceExplorer;
 
     public BotMenuBar(Environment environment) {
         this.environment = environment;
@@ -38,6 +40,20 @@ public class BotMenuBar extends JMenuBar {
         add(sm);
     }
 
+    public void openInterfaceExplorer(ActionEvent actionEvent) {
+        if (interfaceExplorer == null) {
+            interfaceExplorer = new InterfaceExplorer(environment, this);
+        } else {
+            interfaceExplorer.setLocationRelativeTo(environment.getBotContext().getFrame());
+            interfaceExplorer.setState(JFrame.ICONIFIED);
+            interfaceExplorer.setState(JFrame.NORMAL);
+        }
+    }
+
+    public void nullifyInterfaceExplorer() {
+        interfaceExplorer = null;
+    }
+
     private JMenu createFileMenu() {
         JMenu file = new JMenu(Message.FILE.getActive(environment.getPreferences()));
         //TODO: stuff
@@ -48,7 +64,7 @@ public class BotMenuBar extends JMenuBar {
         JMenu window = new JMenu(Message.WINDOW.getActive(environment.getPreferences()));
 
         JMenuItem onTop = new JCheckBoxMenuItem(Message.ALWAYS_ON_TOP.getActive(environment.getPreferences()),
-                environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
+                                                environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
         onTop.addItemListener(act -> {
             environment.getBotContext().getFrame().setAlwaysOnTop(onTop.isSelected());
             environment.getPreferences().set(AlwaysOnTopPreference.class, onTop.isSelected());
@@ -62,7 +78,7 @@ public class BotMenuBar extends JMenuBar {
         JMenu debug = new JMenu(Message.DEBUG.getActive(environment.getPreferences()));
 
         JMenuItem itfs = new JMenuItem("Interfaces");
-        itfs.addActionListener(act -> new InterfaceExplorer(environment));
+        itfs.addActionListener(this::openInterfaceExplorer);
 
         renderScene = new JCheckBoxMenuItem("Render Scene", true);
         renderScene.addItemListener(evt -> {
