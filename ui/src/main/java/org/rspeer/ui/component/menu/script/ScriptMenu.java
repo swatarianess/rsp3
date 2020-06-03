@@ -1,71 +1,78 @@
 package org.rspeer.ui.component.menu.script;
 
-import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.game.script.loader.ScriptBundle;
-import org.rspeer.game.script.loader.ScriptSource;
-import org.rspeer.game.script.loader.local.LocalScriptLoader;
+import org.rspeer.game.script.ScriptMeta;
 import org.rspeer.ui.locale.Message;
+import org.rspeer.ui.script.ScriptSelector;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
-//TODO: Rework menu into actual script selector component
 public class ScriptMenu extends JMenu {
 
-    private static final int COUNT_BEFORE_SCRIPTS = 2;
-
-    private final LocalScriptLoader loader;
     private final Environment environment;
 
+    private JMenuItem selectorMenuItem;
+    private ScriptSelector selector;
+
     public ScriptMenu(Environment environment) {
-        super(Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()));
+        super(Message.SCRIPT.getActive(environment.getPreferences()));
         this.environment = environment;
-        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
-        this.initializeReloadMenuItem();
+        this.initializeMenuItems();
     }
 
-    private void initializeReloadMenuItem() {
-        JMenuItem reload = new JMenuItem(Message.RELOAD.getActive(environment.getPreferences()));
-        reload.addActionListener(this::onReload);
-        add(reload);
-        addSeparator();
+    public void destroyScriptSelector() {
+        selector = null;
     }
 
-    private void onReload(ActionEvent evt) {
-        environment.getScriptController().stop();
-
-        ScriptBundle bundle = loader.load();
-        bundle.addAll(loader.predefined());
-
-        for (int i = COUNT_BEFORE_SCRIPTS; i < getItemCount(); i++) {
-            remove(i);
-        }
-
-        for (ScriptSource src : bundle) {
-            JMenuItem item = new JMenuItem(src.getName());
-            item.addActionListener((itemAct) -> {
-                environment.getScriptController().start(loader.define(src), src);
-                addSeparator();
-                add(createStopItem());
-            });
-
-            add(item);
-        }
+    public ScriptSelector getSelector() {
+        return selector;
     }
 
-    private JMenuItem createStopItem() {
-        JMenuItem stop = new JMenuItem(Message.STOP.getActive(environment.getPreferences()));
-        stop.addActionListener((act) -> {
+    public void onStart() {
+        selector.dispose();
+        selectorMenuItem.setEnabled(false);
+
+        ScriptMeta meta = environment.getScriptController().getCurrent().getMeta();
+        String scriptText = String.format("%s v%s by %s", meta.name(), meta.version(), meta.developer());
+        selectorMenuItem.setText(scriptText);
+
+        JMenuItem stop = createStopMenuItem();
+
+        add(new JSeparator());
+        add(stop);
+    }
+
+    private JMenuItem createStopMenuItem() {
+        JMenuItem stop = new JMenuItem("Stop");
+        stop.addActionListener(act -> {
             environment.getScriptController().stop();
-            for (int i = getItemCount() - 1; i >= 0; i--) {
-                JMenuItem item = getItem(i);
-                remove(i);
-                if (item.getLabel().equals("-")) {
-                    break;
-                }
+
+            Component[] components = getMenuComponents();
+            for (int i = 1; i < components.length; i++) {
+                remove(components[i]);
             }
+
+            selectorMenuItem.setText(Message.SELECTOR.getActive(environment.getPreferences()));
+            selectorMenuItem.setEnabled(true);
         });
         return stop;
+    }
+
+    private void initializeMenuItems() {
+        selectorMenuItem = new JMenuItem(Message.SELECTOR.getActive(environment.getPreferences()));
+        selectorMenuItem.addActionListener(this::openScriptSelector);
+        add(selectorMenuItem);
+    }
+
+    private void openScriptSelector(ActionEvent actionEvent) {
+        if (selector == null) {
+            selector = new ScriptSelector(environment, this);
+        } else {
+            selector.setLocationRelativeTo(environment.getBotContext().getFrame());
+            selector.setState(JFrame.ICONIFIED);
+            selector.setState(JFrame.NORMAL);
+        }
     }
 }

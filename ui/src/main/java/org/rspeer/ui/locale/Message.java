@@ -10,7 +10,7 @@ import java.util.Map;
 
 public enum Message {
 
-    SCRIPT_SELECTOR("Script Selector"),
+    SCRIPT("Script"),
     INTERFACE_EXPLORER("Interface Explorer"),
     RELOAD("Reload"),
     STOP("Stop"),
@@ -29,7 +29,9 @@ public enum Message {
     HELP("Help"),
     WINDOW("Window"),
     ALWAYS_ON_TOP("Always on top"),
-    DEBUG("Debug");
+    DEBUG("Debug"),
+    SELECTOR("Selector"),
+    SCRIPT_SELECTOR("Script Selector");
 
     //certain locales dont exist in the jdk
     public static final Locale LOCALE_DUTCH = new Locale("nl", "NL");
