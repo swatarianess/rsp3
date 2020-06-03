@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class ScriptSelector extends JFrame {
 
@@ -84,15 +85,30 @@ public class ScriptSelector extends JFrame {
     }
 
     private void onReload() {
-        ScriptBundle bundle = loader.load();
-        bundle.addAll(loader.predefined());
+        SwingWorker<ScriptBundle, Void> worker = new SwingWorker<ScriptBundle, Void>() {
+            @Override
+            protected ScriptBundle doInBackground() {
+                ScriptBundle bundle = loader.load();
+                bundle.addAll(loader.predefined());
+                return bundle;
+            }
 
-        viewport.removeAll();
-        bundle.forEach(viewport::addScript);
+            @Override
+            protected void done() {
+                try {
+                    ScriptBundle bundle = get();
 
-        SwingUtilities.invokeLater(() -> {
-            JScrollPane scrollPane = (JScrollPane) viewport.getParent().getParent();
-            scrollPane.getVerticalScrollBar().setValue(0);
-        });
+                    viewport.removeAll();
+                    bundle.forEach(viewport::addScript);
+                    viewport.revalidate();
+
+                    JScrollPane scrollPane = (JScrollPane) viewport.getParent().getParent();
+                    scrollPane.getVerticalScrollBar().setValue(0);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        worker.execute();
     }
 }
