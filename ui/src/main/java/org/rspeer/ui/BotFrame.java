@@ -67,16 +67,6 @@ public class BotFrame extends Window<JFrame> {
         //TODO: Implement logger & save its show/hide state in the preferences file
     }
 
-    public void setApplet(Applet applet) {
-        if (splash != null) {
-            splash = null;
-        }
-        BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
-        Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-        frame.remove(previousComp);
-        frame.add(applet, BorderLayout.CENTER);
-    }
-
     @Override
     public void display() {
         frame.setVisible(true);
@@ -94,7 +84,13 @@ public class BotFrame extends Window<JFrame> {
             splash.setMessage(event.getMessage());
         } else if (e instanceof SetAppletEvent) {
             SetAppletEvent event = (SetAppletEvent) e;
-            setApplet(event.getApplet());
+            if (splash != null) {
+                splash = null;
+            }
+            BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
+            Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+            frame.remove(previousComp);
+            frame.add(event.getApplet(), BorderLayout.CENTER);
         }
     }
 }
