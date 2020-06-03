@@ -50,7 +50,7 @@ public class BotMenuBar extends JMenuBar {
         }
     }
 
-    public void nullifyInterfaceExplorer() {
+    public void destroyInterfaceExplorer() {
         interfaceExplorer = null;
     }
 

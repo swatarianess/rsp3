@@ -77,7 +77,7 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 Game.getEventDispatcher().unsubscribe(InterfaceExplorer.this);
-                menuBar.nullifyInterfaceExplorer();
+                menuBar.destroyInterfaceExplorer();
             }
         });
 
