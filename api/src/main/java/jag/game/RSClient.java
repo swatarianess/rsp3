@@ -1,6 +1,6 @@
 package jag.game;
 
-import org.rspeer.game.event.EventDispatcher;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.provider.callback.EventMediator;
 import jag.RSIntegerNode;
 import jag.RSLinkedList;

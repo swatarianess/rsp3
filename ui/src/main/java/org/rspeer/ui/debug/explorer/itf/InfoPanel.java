@@ -11,12 +11,12 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
-public class InfoPanel extends JPanel {
+class InfoPanel extends JPanel {
 
     private final JPanel content;
     private final GridBagConstraints contentConstraints;
 
-    public InfoPanel() {
+    InfoPanel() {
         setLayout(new GridBagLayout());
 
         content = new JPanel(new GridBagLayout());

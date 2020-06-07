@@ -1,6 +1,6 @@
-package org.rspeer.game.event;
+package org.rspeer.event;
 
-import org.rspeer.game.event.listener.EventListener;
+import org.rspeer.event.listener.EventListener;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

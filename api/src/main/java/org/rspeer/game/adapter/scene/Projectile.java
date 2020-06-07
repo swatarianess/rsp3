@@ -72,9 +72,9 @@ public class Projectile extends Entity<RSProjectile> implements Identifiable, Mo
         if (index == 0) {
             return null;
         } else if (index > 0) {
-            return Npcs.getAt(index - 1);
+            return Npcs.query().indexes(index - 1).results().first();
         }
         index = -index - 1;
-        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.getAt(index);
+        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.query().indexes(index).results().first();
     }
 }

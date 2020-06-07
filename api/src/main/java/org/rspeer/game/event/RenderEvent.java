@@ -1,6 +1,7 @@
 package org.rspeer.game.event;
 
-import org.rspeer.game.event.listener.EventListener;
+import org.rspeer.event.Event;
+import org.rspeer.event.listener.EventListener;
 import org.rspeer.game.event.listener.RenderListener;
 
 import java.awt.*;
