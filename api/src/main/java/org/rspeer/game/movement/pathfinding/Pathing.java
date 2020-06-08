@@ -46,6 +46,10 @@ public class Pathing {
         List<Position> result = new ArrayList<>();
         for (Direction dir : Direction.values()) {
             Position to = from.translate(dir.getXOffset(), dir.getYOffset());
+            if (!to.isInScene()) {
+                continue;
+            }
+            
             if (CollisionFlags.checkWalkable(dir, getFlag(from), getFlag(to), ignoreStartBlocked)) {
                 result.add(to);
             }
