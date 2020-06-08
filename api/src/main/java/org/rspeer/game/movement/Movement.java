@@ -11,6 +11,8 @@ import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Scene;
 import jag.game.RSClient;
 
+import java.util.*;
+
 public class Movement {
 
     private static final int RUN_VAR = 173;
