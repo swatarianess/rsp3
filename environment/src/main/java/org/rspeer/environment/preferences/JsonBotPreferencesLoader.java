@@ -1,10 +1,7 @@
 package org.rspeer.environment.preferences;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import org.rspeer.commons.Configuration;
-import org.rspeer.environment.preferences.type.BotPreference;
 
 import java.io.File;
 import java.io.FileReader;

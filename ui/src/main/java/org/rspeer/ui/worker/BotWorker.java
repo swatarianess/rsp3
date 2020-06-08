@@ -15,9 +15,9 @@ import java.util.List;
 public abstract class BotWorker<T, V> extends SwingWorker<T, V> {
 
     protected final Environment environment;
-    protected final Window window;
+    protected final Window<JFrame> window;
 
-    public BotWorker(Environment environment, Window window) {
+    public BotWorker(Environment environment, Window<JFrame> window) {
         this.environment = environment;
         this.window = window;
     }
