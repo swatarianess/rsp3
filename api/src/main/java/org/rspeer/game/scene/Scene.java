@@ -1,5 +1,6 @@
 package org.rspeer.game.scene;
 
+import jag.game.scene.RSCollisionMap;
 import org.rspeer.game.Game;
 import org.rspeer.game.position.Position;
 import jag.game.RSClient;
@@ -23,6 +24,14 @@ public class Scene {
             return new Dynamic(client.getDynamicSceneData());
         }
         return null;
+    }
+
+    public static RSCollisionMap[] getCollisionMaps() {
+        return Game.getClient().getCollisionMaps();
+    }
+
+    public static RSCollisionMap getCollisionMap(int floorLevel) {
+        return getCollisionMaps()[floorLevel];
     }
 
     public static byte[][][] getRenderRules() {
