@@ -4,72 +4,70 @@ import jag.RSNode;
 
 public interface RSBuffer extends RSNode {
 
-    static int writeEscapedStringBytes(CharSequence sequence, int offset, int length, byte[] buffer, int caret) {
+    static int writeEscapedStringBytes(CharSequence sequence, int offset, int length, byte[] dst, int caret) {
         int size = length - offset;
-
         for (int i = 0; i < size; ++i) {
             char c = sequence.charAt(i + offset);
             if (c > 0 && c < 128 || c >= 160 && c <= 255) {
-                buffer[i + caret] = (byte) c;
+                dst[i + caret] = (byte) c;
             } else if (c == 8364) {
-                buffer[i + caret] = -128;
+                dst[i + caret] = -128;
             } else if (c == 8218) {
-                buffer[i + caret] = -126;
+                dst[i + caret] = -126;
             } else if (c == 402) {
-                buffer[i + caret] = -125;
+                dst[i + caret] = -125;
             } else if (c == 8222) {
-                buffer[i + caret] = -124;
+                dst[i + caret] = -124;
             } else if (c == 8230) {
-                buffer[i + caret] = -123;
+                dst[i + caret] = -123;
             } else if (c == 8224) {
-                buffer[i + caret] = -122;
+                dst[i + caret] = -122;
             } else if (c == 8225) {
-                buffer[i + caret] = -121;
+                dst[i + caret] = -121;
             } else if (c == 710) {
-                buffer[i + caret] = -120;
+                dst[i + caret] = -120;
             } else if (c == 8240) {
-                buffer[i + caret] = -119;
+                dst[i + caret] = -119;
             } else if (c == 352) {
-                buffer[i + caret] = -118;
+                dst[i + caret] = -118;
             } else if (c == 8249) {
-                buffer[i + caret] = -117;
+                dst[i + caret] = -117;
             } else if (c == 338) {
-                buffer[i + caret] = -116;
+                dst[i + caret] = -116;
             } else if (c == 381) {
-                buffer[i + caret] = -114;
+                dst[i + caret] = -114;
             } else if (c == 8216) {
-                buffer[i + caret] = -111;
+                dst[i + caret] = -111;
             } else if (c == 8217) {
-                buffer[i + caret] = -110;
+                dst[i + caret] = -110;
             } else if (c == 8220) {
-                buffer[i + caret] = -109;
+                dst[i + caret] = -109;
             } else if (c == 8221) {
-                buffer[i + caret] = -108;
+                dst[i + caret] = -108;
             } else if (c == 8226) {
-                buffer[i + caret] = -107;
+                dst[i + caret] = -107;
             } else if (c == 8211) {
-                buffer[i + caret] = -106;
+                dst[i + caret] = -106;
             } else if (c == 8212) {
-                buffer[i + caret] = -105;
+                dst[i + caret] = -105;
             } else if (c == 732) {
-                buffer[i + caret] = -104;
+                dst[i + caret] = -104;
             } else if (c == 8482) {
-                buffer[i + caret] = -103;
+                dst[i + caret] = -103;
             } else if (c == 353) {
-                buffer[i + caret] = -102;
+                dst[i + caret] = -102;
             } else if (c == 8250) {
-                buffer[i + caret] = -101;
+                dst[i + caret] = -101;
             } else if (c == 339) {
-                buffer[i + caret] = -100;
+                dst[i + caret] = -100;
             } else if (c == 382) {
-                buffer[i + caret] = -98;
+                dst[i + caret] = -98;
             } else if (c == 376) {
-                buffer[i + caret] = -97;
+                dst[i + caret] = -97;
             } else {
-                buffer[i + caret] = 63;
+                dst[i + caret] = 63;
             }
         }
-
         return size;
     }
 
@@ -159,8 +157,8 @@ public interface RSBuffer extends RSNode {
 
     default RSBuffer pdata(byte[] buffer, int caret, int length) {
         byte[] data = getPayload();
-        for (int k = caret; k < caret + length; k++) {
-            data[seek()] = buffer[k];
+        for (int i = caret; i < caret + length; i++) {
+            data[seek()] = buffer[i];
         }
         return this;
     }

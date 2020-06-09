@@ -26,15 +26,10 @@ public class Scene {
         return new Dynamic(client.getDynamicSceneData());
     }
 
-    public static RSCollisionMap getCollisionMap() {
-        return getCollisionMap(getFloorLevel());
-    }
-
-    public static RSCollisionMap getCollisionMap(int level) {
-        if (level < 0 || level > 3) {
-            return null;
-        }
-        return Game.getClient().getCollisionMaps()[level]; //this is never null
+    public static int getCollisionFlag(Position tile) {
+        tile = tile.toScene();
+        RSCollisionMap map = Game.getClient().getCollisionMaps()[tile.getFloorLevel()];
+        return map.getFlag(tile.getX(), tile.getY());
     }
 
     public static byte[][][] getRenderRules() {
