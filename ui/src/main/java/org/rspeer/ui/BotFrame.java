@@ -11,7 +11,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.event.PreferenceEvent;
+import org.rspeer.environment.preferences.event.PreferenceListener;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
+import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
@@ -20,7 +23,7 @@ import org.rspeer.ui.event.SplashEvent;
 import org.rspeer.ui.event.listener.SetAppletListener;
 import org.rspeer.ui.event.listener.SplashListener;
 
-public class BotFrame extends Window<JFrame> implements SplashListener, SetAppletListener {
+public class BotFrame extends Window<JFrame> implements SplashListener, SetAppletListener, PreferenceListener {
 
     private final Environment environment;
 
@@ -105,5 +108,12 @@ public class BotFrame extends Window<JFrame> implements SplashListener, SetApple
         Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
         frame.remove(previousComp);
         frame.add(e.getApplet(), BorderLayout.CENTER);
+    }
+
+    @Override
+    public void notify(PreferenceEvent e) {
+        if (e.getSource() instanceof SceneRenderPreference) {
+            menu.getRenderScene().setSelected(false);
+        }
     }
 }

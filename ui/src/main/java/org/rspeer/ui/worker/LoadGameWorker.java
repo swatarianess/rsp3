@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import javax.swing.JFrame;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.event.PreferenceEvent;
+import org.rspeer.environment.preferences.type.BotPreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
@@ -43,8 +45,9 @@ public class LoadGameWorker extends BotWorker<RSClient, String> {
             SetAppletEvent event = new SetAppletEvent(window, client.asApplet());
             environment.getEventDispatcher().dispatch(event);
             if (!environment.getPreferences().valueOf(SceneRenderPreference.class)) {
-                //TODO readd this after event dispatcher is finished via PreferenceListener and PerferenceEvent
-                //window.getMenu().getRenderScene().setSelected(false);
+                BotPreference<Boolean> preference = environment.getPreferences().get(SceneRenderPreference.class);
+                PreferenceEvent preferenceEvent = new PreferenceEvent(preference);
+                environment.getEventDispatcher().dispatch(preferenceEvent);
             }
 
         } catch (InterruptedException | ExecutionException e) {
