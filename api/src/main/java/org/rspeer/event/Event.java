@@ -3,7 +3,7 @@ package org.rspeer.event;
 import java.util.EventObject;
 import org.rspeer.event.listener.EventListener;
 
-public abstract class Event<T, V extends EventListener> extends EventObject {
+public abstract class Event<T, V> extends EventObject {
 
     private final Class<V> listenerClass;
 

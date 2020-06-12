@@ -1,8 +1,6 @@
 package org.rspeer.environment.preferences.event;
 
-import org.rspeer.event.listener.EventListener;
-
-public interface PreferenceListener extends EventListener {
+public interface PreferenceListener {
 
     void notify(PreferenceEvent e);
 }
