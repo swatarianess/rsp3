@@ -29,7 +29,6 @@ import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.event.Event;
 import org.rspeer.game.script.Script;
 import org.rspeer.game.script.loader.ScriptBundle;
 import org.rspeer.game.script.loader.ScriptSource;
@@ -136,10 +135,6 @@ public class ScriptSelector extends Window<JDialog> {
         frame.dispose();
     }
 
-    @Override
-    public <T extends Event<?, ?>> void accept(T event) {
-
-    }
 
     /*
             Static just to make it clear that we're referring to ScriptButton

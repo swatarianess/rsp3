@@ -12,14 +12,15 @@ import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
-import org.rspeer.event.Event;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
+import org.rspeer.ui.event.listener.SetAppletListener;
+import org.rspeer.ui.event.listener.SplashListener;
 
-public class BotFrame extends Window<JFrame> {
+public class BotFrame extends Window<JFrame> implements SplashListener, SetAppletListener {
 
     private final Environment environment;
 
@@ -31,6 +32,7 @@ public class BotFrame extends Window<JFrame> {
         this.environment = environment;
         applyDefaults();
         applyComponents();
+        applyListeners();
     }
 
     private void applyDefaults() {
@@ -70,6 +72,15 @@ public class BotFrame extends Window<JFrame> {
         //TODO: Implement logger & save its show/hide state in the preferences file
     }
 
+    private void applyListeners() {
+        environment.getEventDispatcher().subscribe(this);
+        /*
+                Typically, we should add a windowClosing callback for the frame
+                but we're not doing that here since the setDefaultCloseOperation
+                method is taking an EXIT_ON_CLOSE value
+         */
+    }
+
     @Override
     public void display() {
         frame.setVisible(true);
@@ -81,19 +92,18 @@ public class BotFrame extends Window<JFrame> {
     }
 
     @Override
-    public <T extends Event<?, ?>> void accept(T e) {
-        if (e instanceof SplashEvent) {
-            SplashEvent event = (SplashEvent) e;
-            splash.setMessage(event.getMessage());
-        } else if (e instanceof SetAppletEvent) {
-            SetAppletEvent event = (SetAppletEvent) e;
-            if (splash != null) {
-                splash = null;
-            }
-            BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
-            Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-            frame.remove(previousComp);
-            frame.add(event.getApplet(), BorderLayout.CENTER);
+    public void notify(SplashEvent e) {
+        splash.setMessage(e.getMessage());
+    }
+
+    @Override
+    public void notify(SetAppletEvent e) {
+        if (splash != null) {
+            splash = null;
         }
+        BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
+        Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+        frame.remove(previousComp);
+        frame.add(e.getApplet(), BorderLayout.CENTER);
     }
 }
