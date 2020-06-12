@@ -1,6 +1,7 @@
 package org.rspeer.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -13,35 +14,51 @@ public class EventDispatcher {
     private final Map<Class<?>, List<EventListener>> listeners = new ConcurrentHashMap<>();
 
     public void subscribe(EventListener el) {
-        Class<?> group = el.getClass();
-
-        if (!listeners.containsKey(group)) {
-            listeners.put(group, new CopyOnWriteArrayList<>());
+        List<Class<?>> interfaces = getEventInterfaces(el.getClass());
+        for (Class<?> group : interfaces) {
+            if (!listeners.containsKey(group)) {
+                listeners.put(group, new CopyOnWriteArrayList<>());
+            }
+            listeners.get(group).add(el);
         }
-
-        listeners.get(group).add(el);
     }
 
     public void unsubscribe(EventListener el) {
-        Class<?> group = el.getClass();
+        List<Class<?>> interfaces = getEventInterfaces(el.getClass());
+        for (Class<?> group : interfaces) {
+            if (listeners.containsKey(group)) {
+                List<EventListener> listenersList = listeners.get(group);
+                listenersList.remove(el);
 
-        if (listeners.containsKey(group)) {
-            List<EventListener> listenersList = listeners.get(group);
-            listenersList.remove(el);
-
-            if (listenersList.isEmpty()) {
-                listeners.remove(group);
+                if (listenersList.isEmpty()) {
+                    listeners.remove(group);
+                }
             }
         }
     }
 
     public void dispatch(Event<?, ?> e) {
-        for (EventListener listener : getListeners(e)) {
+        List<EventListener> listenersList = listeners.getOrDefault(e.getListenerClass(), Collections.emptyList());
+        for (EventListener listener : listenersList) {
             e.dispatch(listener);
         }
     }
 
-    private List<EventListener> getListeners(Event<?, ?> e) {
-        return Collections.unmodifiableList(listeners.getOrDefault(e.getListenerClass(), new ArrayList<>()));
+    private List<Class<?>> getEventInterfaces(Class<?> clazz) {
+        List<Class<?>> interfaces = new ArrayList<>();
+        if (clazz != null) {
+            // First we check the direct class interfaces
+            for (Class<?> interfase : clazz.getInterfaces()) {
+                if (Arrays.asList(interfase.getInterfaces()).contains(EventListener.class)) {
+                    if (!interfaces.contains(interfase)) {
+                        interfaces.add(interfase);
+                        interfaces.addAll(getEventInterfaces(interfase));
+                    }
+                }
+            }
+            // Then we check the SuperClass interfaces
+            interfaces.addAll(getEventInterfaces(clazz.getSuperclass()));
+        }
+        return interfaces;
     }
 }
