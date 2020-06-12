@@ -1,7 +1,6 @@
 package org.rspeer.event;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +48,15 @@ public class EventDispatcher {
         if (clazz != null) {
             // First we check the direct class interfaces
             for (Class<?> interfase : clazz.getInterfaces()) {
-                if (Arrays.asList(interfase.getInterfaces()).contains(EventListener.class)) {
-                    if (!interfaces.contains(interfase)) {
-                        interfaces.add(interfase);
-                        interfaces.addAll(getEventInterfaces(interfase));
+                // Check for the interface's SuperClass to determine if it extends EventListener
+                for (Class<?> superInterfase : interfase.getInterfaces()) {
+                    // If the interface extends EventListener then add it to the list
+                    if (superInterfase.equals(EventListener.class)) {
+                        if (!interfaces.contains(interfase)) {
+                            interfaces.add(interfase);
+                            interfaces.addAll(getEventInterfaces(interfase));
+                        }
+                        break;
                     }
                 }
             }
