@@ -54,7 +54,6 @@ public class EventDispatcher {
                     if (superInterfase.equals(EventListener.class)) {
                         if (!interfaces.contains(interfase)) {
                             interfaces.add(interfase);
-                            interfaces.addAll(getEventInterfaces(interfase));
                         }
                         break;
                     }
