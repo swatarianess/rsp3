@@ -1,12 +1,11 @@
 package org.rspeer.ui.event;
 
 import java.applet.Applet;
-import org.rspeer.event.Event;
 import org.rspeer.event.listener.EventListener;
 import org.rspeer.ui.Window;
-import org.rspeer.ui.event.listener.SetAppletListener;
+import org.rspeer.ui.event.listener.UIListener;
 
-public class SetAppletEvent extends Event<Window<?>, SetAppletListener> {
+public class SetAppletEvent extends UIEvent {
 
     private final Applet applet;
 
@@ -17,7 +16,7 @@ public class SetAppletEvent extends Event<Window<?>, SetAppletListener> {
      * @throws IllegalArgumentException if source is null.
      */
     public SetAppletEvent(Window source, Applet applet) {
-        super(source, SetAppletListener.class);
+        super(source);
         this.applet = applet;
     }
 
@@ -27,6 +26,6 @@ public class SetAppletEvent extends Event<Window<?>, SetAppletListener> {
 
     @Override
     public void dispatch(EventListener listener) {
-        ((SetAppletListener) listener).notify(this);
+        ((UIListener) listener).notify(this);
     }
 }

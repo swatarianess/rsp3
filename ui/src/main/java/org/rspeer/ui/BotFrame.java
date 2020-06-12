@@ -20,10 +20,10 @@ import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
-import org.rspeer.ui.event.listener.SetAppletListener;
-import org.rspeer.ui.event.listener.SplashListener;
+import org.rspeer.ui.event.UIEvent;
+import org.rspeer.ui.event.listener.UIListener;
 
-public class BotFrame extends Window<JFrame> implements SplashListener, SetAppletListener, PreferenceListener {
+public class BotFrame extends Window<JFrame> implements UIListener, PreferenceListener {
 
     private final Environment environment;
 
@@ -95,19 +95,20 @@ public class BotFrame extends Window<JFrame> implements SplashListener, SetApple
     }
 
     @Override
-    public void notify(SplashEvent e) {
-        splash.setMessage(e.getMessage());
-    }
-
-    @Override
-    public void notify(SetAppletEvent e) {
-        if (splash != null) {
-            splash = null;
+    public void notify(UIEvent e) {
+        if (e instanceof SplashEvent) {
+            SplashEvent event = (SplashEvent) e;
+            splash.setMessage(event.getMessage());
+        } else if (e instanceof SetAppletEvent) {
+            SetAppletEvent event = (SetAppletEvent) e;
+            if (splash != null) {
+                splash = null;
+            }
+            BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
+            Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+            frame.remove(previousComp);
+            frame.add(event.getApplet(), BorderLayout.CENTER);
         }
-        BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
-        Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-        frame.remove(previousComp);
-        frame.add(e.getApplet(), BorderLayout.CENTER);
     }
 
     @Override

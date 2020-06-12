@@ -1,11 +1,10 @@
 package org.rspeer.ui.event;
 
-import org.rspeer.event.Event;
 import org.rspeer.event.listener.EventListener;
 import org.rspeer.ui.Window;
-import org.rspeer.ui.event.listener.SplashListener;
+import org.rspeer.ui.event.listener.UIListener;
 
-public class SplashEvent extends Event<Window<?>, SplashListener> {
+public class SplashEvent extends UIEvent {
 
     private final String message;
 
@@ -16,7 +15,7 @@ public class SplashEvent extends Event<Window<?>, SplashListener> {
      * @throws IllegalArgumentException if source is null.
      */
     public SplashEvent(Window source, String message) {
-        super(source, SplashListener.class);
+        super(source);
         this.message = message;
     }
 
@@ -26,6 +25,6 @@ public class SplashEvent extends Event<Window<?>, SplashListener> {
 
     @Override
     public void dispatch(EventListener listener) {
-        ((SplashListener) listener).notify(this);
+        ((UIListener) listener).notify(this);
     }
 }
