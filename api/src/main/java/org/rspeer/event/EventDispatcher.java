@@ -1,37 +1,37 @@
 package org.rspeer.event;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import org.rspeer.event.listener.EventListener;
 
 public class EventDispatcher {
 
-    private final Map<Class<?>, List<EventListener>> listeners = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Set<EventListener>> listeners = new ConcurrentHashMap<>();
 
     public void subscribe(EventListener el) {
-        List<Class<?>> interfaces = getListenerInterfaces(el.getClass());
+        Set<Class<?>> interfaces = getListenerInterfaces(el.getClass());
         interfaces.forEach(group -> {
             if (!listeners.containsKey(group)) {
-                listeners.put(group, new CopyOnWriteArrayList<>());
+                listeners.put(group, new CopyOnWriteArraySet<>());
             }
             listeners.get(group).add(el);
         });
     }
 
     public void unsubscribe(EventListener el) {
-        List<Class<?>> interfaces = getListenerInterfaces(el.getClass());
+        Set<Class<?>> interfaces = getListenerInterfaces(el.getClass());
         interfaces.forEach(group -> {
             if (listeners.containsKey(group)) {
-                List<EventListener> listenersList = listeners.get(group);
-                listenersList.remove(el);
+                Set<EventListener> listenersGroup = listeners.get(group);
+                listenersGroup.remove(el);
 
-                if (listenersList.isEmpty()) {
+                if (listenersGroup.isEmpty()) {
                     listeners.remove(group);
                 }
             }
@@ -40,23 +40,23 @@ public class EventDispatcher {
 
     public void dispatch(Event<?, ?> e) {
         Class<?> group = e.getListenerClass();
-        List<EventListener> listenersList = listeners.getOrDefault(group, Collections.emptyList());
-        listenersList.forEach(e::dispatch);
+        Set<EventListener> listenersGroup = listeners.getOrDefault(group, Collections.emptySet());
+        listenersGroup.forEach(e::dispatch);
     }
 
-    private List<Class<?>> getListenerInterfaces(Class<?> clazz) {
-        List<Class<?>> listenerInterfaces = new ArrayList<>();
+    private Set<Class<?>> getListenerInterfaces(Class<?> clazz) {
+        Set<Class<?>> interfaces = new HashSet<>();
         if (clazz != null) {
             // First we check the directly implemented interfaces
-            List<Class<?>> impl = Arrays.stream(clazz.getInterfaces())
-                                        .filter(this::isEventListenerInterface)
-                                        .collect(Collectors.toList());
-            listenerInterfaces.addAll(impl);
+            Set<Class<?>> impl = Arrays.stream(clazz.getInterfaces())
+                                       .filter(this::isEventListenerInterface)
+                                       .collect(Collectors.toSet());
+            interfaces.addAll(impl);
             // Then we check interfaces implemented by the SuperClass
             Class<?> superClass = clazz.getSuperclass();
-            listenerInterfaces.addAll(getListenerInterfaces(superClass));
+            interfaces.addAll(getListenerInterfaces(superClass));
         }
-        return listenerInterfaces;
+        return interfaces;
     }
 
     private boolean isEventListenerInterface(Class<?> clazz) {
