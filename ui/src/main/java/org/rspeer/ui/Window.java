@@ -14,5 +14,5 @@ public abstract class Window<T extends java.awt.Window> {
 
     public abstract void dispose();
 
-    public abstract <E extends Event<?>> void accept(E event);
+    public abstract <E extends Event<?, ?>> void accept(E event);
 }

@@ -6,6 +6,27 @@ package org.rspeer.ui.component.script;
     Date: Tuesday - 06/02/2020
 */
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
+import javax.swing.border.TitledBorder;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.event.Event;
@@ -17,15 +38,6 @@ import org.rspeer.ui.Window;
 import org.rspeer.ui.component.layout.WrapLayout;
 import org.rspeer.ui.component.menu.BotToolBar.StartButton;
 import org.rspeer.ui.locale.Message;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class ScriptSelector extends Window<JDialog> {
 
@@ -125,7 +137,7 @@ public class ScriptSelector extends Window<JDialog> {
     }
 
     @Override
-    public <T extends Event<?>> void accept(T event) {
+    public <T extends Event<?, ?>> void accept(T event) {
 
     }
 

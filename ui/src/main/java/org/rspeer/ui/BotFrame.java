@@ -1,5 +1,14 @@
 package org.rspeer.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
@@ -9,12 +18,6 @@ import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.applet.Applet;
-import java.awt.*;
-import java.io.IOException;
 
 public class BotFrame extends Window<JFrame> {
 
@@ -78,7 +81,7 @@ public class BotFrame extends Window<JFrame> {
     }
 
     @Override
-    public <T extends Event<?>> void accept(T e) {
+    public <T extends Event<?, ?>> void accept(T e) {
         if (e instanceof SplashEvent) {
             SplashEvent event = (SplashEvent) e;
             splash.setMessage(event.getMessage());

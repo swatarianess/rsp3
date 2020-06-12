@@ -3,7 +3,14 @@ package org.rspeer.ui.event;
 import org.rspeer.event.Event;
 import org.rspeer.event.listener.EventListener;
 
-public abstract class UIEvent<T> extends Event<T> {
+//TODO: Find a better implementation for this class
+// Possible approaches:
+// 1- Instantiate the EventMediator/EventDispatcher before the game is loaded then reference them in the client later on
+// 2- Make EventMediator & EventDispatcher static instead of injecting them into the game
+// 3- Refactor this class so that it doesn't require a generic type
+// .
+// NOTE: This class doesn't even relate to the EventMediator/EventDispatcher
+public abstract class UIEvent<T> extends Event<T, T> {
 
     /**
      * Constructs a prototypical Event.
@@ -12,7 +19,7 @@ public abstract class UIEvent<T> extends Event<T> {
      * @throws IllegalArgumentException if source is null.
      */
     public UIEvent(T source) {
-        super(source);
+        super(source, null);
     }
 
     @Override
