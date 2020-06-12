@@ -46,15 +46,17 @@ public class EventDispatcher {
 
     private Set<Class<?>> getListenerInterfaces(Class<?> clazz) {
         Set<Class<?>> interfaces = new HashSet<>();
-        if (clazz != null) {
+        if (clazz != null && !clazz.equals(Object.class)) {
             // First we check the directly implemented interfaces
             Set<Class<?>> impl = Arrays.stream(clazz.getInterfaces())
                                        .filter(this::isEventListenerInterface)
                                        .collect(Collectors.toSet());
             interfaces.addAll(impl);
+
             // Then we check interfaces implemented by the SuperClass
             Class<?> superClass = clazz.getSuperclass();
-            interfaces.addAll(getListenerInterfaces(superClass));
+            Set<Class<?>> superImpl = getListenerInterfaces(superClass);
+            interfaces.addAll(superImpl);
         }
         return interfaces;
     }
