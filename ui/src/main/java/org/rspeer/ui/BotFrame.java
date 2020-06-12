@@ -96,18 +96,20 @@ public class BotFrame extends Window<JFrame> implements UIListener, PreferenceLi
 
     @Override
     public void notify(UIEvent e) {
-        if (e instanceof SplashEvent) {
-            SplashEvent event = (SplashEvent) e;
-            splash.setMessage(event.getMessage());
-        } else if (e instanceof SetAppletEvent) {
-            SetAppletEvent event = (SetAppletEvent) e;
-            if (splash != null) {
-                splash = null;
+        if (e.getSource() == this) {
+            if (e instanceof SplashEvent) {
+                SplashEvent event = (SplashEvent) e;
+                splash.setMessage(event.getMessage());
+            } else if (e instanceof SetAppletEvent) {
+                SetAppletEvent event = (SetAppletEvent) e;
+                if (splash != null) {
+                    splash = null;
+                }
+                BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
+                Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+                frame.remove(previousComp);
+                frame.add(event.getApplet(), BorderLayout.CENTER);
             }
-            BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
-            Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-            frame.remove(previousComp);
-            frame.add(event.getApplet(), BorderLayout.CENTER);
         }
     }
 
