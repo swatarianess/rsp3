@@ -14,17 +14,17 @@ public class EventDispatcher {
 
     public void subscribe(EventListener el) {
         List<Class<?>> interfaces = getEventInterfaces(el.getClass());
-        for (Class<?> group : interfaces) {
+        interfaces.forEach(group -> {
             if (!listeners.containsKey(group)) {
                 listeners.put(group, new CopyOnWriteArrayList<>());
             }
             listeners.get(group).add(el);
-        }
+        });
     }
 
     public void unsubscribe(EventListener el) {
         List<Class<?>> interfaces = getEventInterfaces(el.getClass());
-        for (Class<?> group : interfaces) {
+        interfaces.forEach(group -> {
             if (listeners.containsKey(group)) {
                 List<EventListener> listenersList = listeners.get(group);
                 listenersList.remove(el);
@@ -33,14 +33,13 @@ public class EventDispatcher {
                     listeners.remove(group);
                 }
             }
-        }
+        });
     }
 
     public void dispatch(Event<?, ?> e) {
-        List<EventListener> listenersList = listeners.getOrDefault(e.getListenerClass(), Collections.emptyList());
-        for (EventListener listener : listenersList) {
-            e.dispatch(listener);
-        }
+        Class<?> group = e.getListenerClass();
+        List<EventListener> listenersList = listeners.getOrDefault(group, Collections.emptyList());
+        listenersList.forEach(e::dispatch);
     }
 
     private List<Class<?>> getEventInterfaces(Class<?> clazz) {
