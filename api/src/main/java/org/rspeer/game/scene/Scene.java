@@ -1,11 +1,11 @@
 package org.rspeer.game.scene;
 
-import jag.game.scene.RSCollisionMap;
-import org.rspeer.game.Game;
-import org.rspeer.game.position.Position;
 import jag.game.RSClient;
+import jag.game.scene.RSCollisionMap;
 import jag.game.scene.RSSceneGraph;
 import jag.game.scene.RSTile;
+import org.rspeer.game.Game;
+import org.rspeer.game.position.Position;
 
 public class Scene {
 
@@ -20,18 +20,16 @@ public class Scene {
 
     public static Dynamic getDynamic() {
         RSClient client = Game.getClient();
-        if (client.isInInstancedScene()) {
-            return new Dynamic(client.getDynamicSceneData());
+        if (!client.isSceneDynamic()) {
+            return null;
         }
-        return null;
+        return new Dynamic(client.getDynamicSceneData());
     }
 
-    public static RSCollisionMap[] getCollisionMaps() {
-        return Game.getClient().getCollisionMaps();
-    }
-
-    public static RSCollisionMap getCollisionMap(int floorLevel) {
-        return getCollisionMaps()[floorLevel];
+    public static int getCollisionFlag(Position tile) {
+        tile = tile.toScene();
+        RSCollisionMap map = Game.getClient().getCollisionMaps()[tile.getFloorLevel()];
+        return map.getFlag(tile.getX(), tile.getY());
     }
 
     public static byte[][][] getRenderRules() {
