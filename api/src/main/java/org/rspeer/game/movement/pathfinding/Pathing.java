@@ -1,6 +1,5 @@
 package org.rspeer.game.movement.pathfinding;
 
-import jag.game.scene.RSCollisionMap;
 import org.rspeer.game.effect.Direction;
 import org.rspeer.game.movement.pathfinding.util.CollisionFlags;
 import org.rspeer.game.position.Position;
@@ -10,16 +9,16 @@ import java.util.*;
 
 public class Pathing {
 
-    public static int getPathDistance(Position from, Position to) {
-        return getPathDistance(from, to, false);
+    public static int getDistance(Position from, Position to) {
+        return getDistance(from, to, false);
     }
 
-    public static int getPathDistance(Position from, Position to, boolean ignoreStartBlocked) {
-        final Map<Position, Integer> scoreMap = new HashMap<>();
+    public static int getDistance(Position from, Position to, boolean ignoreStartBlocked) {
+        Map<Position, Integer> scoreMap = new HashMap<>();
 
-        PriorityQueue<Position> evaluate = new PriorityQueue<>(Comparator.comparingInt(position
-                -> scoreMap.getOrDefault(position, Integer.MAX_VALUE))
-        );
+        Queue<Position> evaluate = new PriorityQueue<>(Comparator.comparingInt(
+                position -> scoreMap.getOrDefault(position, Integer.MAX_VALUE)
+        ));
 
         scoreMap.put(from, 0);
         evaluate.add(from);
@@ -49,18 +48,12 @@ public class Pathing {
             if (!to.isInScene()) {
                 continue;
             }
-            
-            if (CollisionFlags.checkWalkable(dir, getFlag(from), getFlag(to), ignoreStartBlocked)) {
+
+            if (CollisionFlags.checkWalkable(dir, Scene.getCollisionFlag(from), Scene.getCollisionFlag(to), ignoreStartBlocked)) {
                 result.add(to);
             }
         }
 
         return result;
-    }
-
-    public static int getFlag(Position tile) {
-        Position scenePos = tile.toScene();
-        RSCollisionMap map = Scene.getCollisionMap(tile.getFloorLevel());
-        return map.getFlags()[scenePos.getX()][scenePos.getY()];
     }
 }
