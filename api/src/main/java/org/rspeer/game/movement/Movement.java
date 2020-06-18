@@ -50,6 +50,7 @@ public class Movement {
         if (Movement.isRunEnabled() == on) {
             return true;
         }
+
         InterfaceComponent btn = Interfaces.getDirect(160, 22); //TODO address
         return btn != null && btn.interact(x -> true);
     }
@@ -58,6 +59,7 @@ public class Movement {
         if (!isDestinationSet()) {
             return null;
         }
+
         Position base = Scene.getBase();
         RSClient client = Game.getClient();
         return new Position(base.getX() + client.getDestinationX(), base.getY() + client.getDestinationY(), base.getFloorLevel());
