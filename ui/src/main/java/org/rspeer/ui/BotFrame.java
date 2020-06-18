@@ -76,7 +76,7 @@ public class BotFrame extends Window<JFrame> implements UIListener, PreferenceLi
     }
 
     private void applyListeners() {
-        environment.getEventDispatcher().subscribe(this);
+        environment.getInternalDispatcher().subscribe(this);
         /*
                 Typically, we should add a windowClosing callback for the frame
                 but we're not doing that here since the setDefaultCloseOperation
