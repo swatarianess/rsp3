@@ -97,8 +97,8 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 }
                 ScriptProvider loader = new ScriptLoaderProvider().getLoader();
                 Script.State currentState = currentScript.getState();
+                environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(source, Script.State.STOPPED, currentState));
                 environment.getScriptController().stop();
-                Game.getEventDispatcher().dispatch(new ScriptChangeEvent(source, Script.State.STOPPED, currentState));
                 ScriptBundle bundle = loader.load();
                 bundle.stream().filter(s -> s.shallowEquals(source)).findFirst().ifPresent(reloaded -> {
                     environment.getScriptController().start(loader.define(reloaded), reloaded);
