@@ -9,8 +9,12 @@ package org.rspeer.ui.component.script;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.event.Event;
+import org.rspeer.game.Game;
 import org.rspeer.game.script.Script;
+import org.rspeer.game.script.event.listener.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptBundle;
+import org.rspeer.game.script.loader.ScriptLoaderProvider;
+import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.game.script.loader.local.LocalScriptLoader;
 import org.rspeer.ui.Window;
@@ -32,18 +36,15 @@ public class ScriptSelector extends Window<JDialog> {
 
     private final Environment environment;
     private final Viewport viewport;
-    private final LocalScriptLoader loader;
-    private final StartButton startButton;
-    private final ReloadButton reloadButton;
+    private final ScriptProvider loader;
 
-    public ScriptSelector(JFrame parent, Environment environment, StartButton control, ReloadButton reloadButton) {
+    public ScriptSelector(JFrame parent, Environment environment) {
         super(new JDialog(parent, Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()), true));
 
+        ScriptLoaderProvider provider = new ScriptLoaderProvider();
         this.environment = environment;
-        this.reloadButton = reloadButton;
         this.viewport = initializeViewport();
-        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
-        this.startButton = control;
+        this.loader = provider.getLoader();
 
         try {
             frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
@@ -214,15 +215,13 @@ public class ScriptSelector extends Window<JDialog> {
             button.addActionListener(act -> {
                 Script script = loader.define(source);
                 environment.getScriptController().start(script);
-                startButton.setText("Stop");
-                reloadButton.addActionListener(restart -> {
-                    environment.getScriptController().stop();
-                    ScriptBundle bundle = loader.load();
-                    bundle.stream().filter(s -> s.shallowEquals(source)).findFirst().ifPresent(reloaded -> {
-                        environment.getScriptController().start(loader.define(reloaded));
-                    });
-                });
-                reloadButton.setVisible(true);
+
+               environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(
+                    source,
+                    Script.State.STOPPED,
+                    Script.State.RUNNING
+                ));
+
                 dispose();
             });
 
