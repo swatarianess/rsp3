@@ -12,7 +12,6 @@ import org.rspeer.ui.event.SplashEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.applet.Applet;
 import java.awt.*;
 import java.io.IOException;
 
