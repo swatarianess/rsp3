@@ -7,26 +7,26 @@ import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptChangeEvent extends Event<ScriptSource> {
 
-    private final Script.State newState;
-    private final Script.State oldState;
+    private final Script.State state;
+    private final Script.State previousState;
 
-    public ScriptChangeEvent(ScriptSource source, Script.State newState, Script.State oldState) {
+    public ScriptChangeEvent(ScriptSource source, Script.State state, Script.State previousState) {
         super(source);
-        this.newState = newState;
-        this.oldState = oldState;
+        this.state = state;
+        this.previousState = previousState;
     }
 
-    public Script.State getOldState() {
-        return oldState;
+    public Script.State getPreviousState() {
+        return previousState;
     }
 
-    public Script.State getNewState() {
-        return newState;
+    public Script.State getState() {
+        return state;
     }
 
     @Override
     public void dispatch(EventListener listener) {
-        if(listener instanceof ScriptChangeListener) {
+        if (listener instanceof ScriptChangeListener) {
             ((ScriptChangeListener) listener).notify(this);
         }
     }

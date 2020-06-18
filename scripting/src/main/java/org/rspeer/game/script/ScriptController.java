@@ -1,5 +1,6 @@
 package org.rspeer.game.script;
 
+import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
@@ -8,13 +9,13 @@ public class ScriptController {
     private ScriptSource source;
     private Thread scriptThread;
 
-    public void start(Script script, ScriptSource source) {
+    public void start(ScriptProvider provider, ScriptSource source) {
         if (active != null) {
             throw new IllegalStateException("A script is already running");
         }
 
         this.source = source;
-        active = script;
+        active = provider.define(source);
         active.setState(Script.State.STARTING);
         active.setState(Script.State.RUNNING);
 
