@@ -19,7 +19,6 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
 
     private final StartButton start;
     private final ReloadButton reload;
-    private ScriptSource scriptSource;
 
     public BotToolBar(Environment environment) {
         environment.getInternalDispatcher().subscribe(this);
@@ -28,7 +27,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
 
         add(Box.createHorizontalGlue());
 
-        reload = new ReloadButton(environment, scriptSource);
+        reload = new ReloadButton(environment);
         add(reload);
 
         start = new StartButton();
@@ -39,29 +38,32 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 ScriptSelector selector = new ScriptSelector(environment.getBotContext().getFrame(), environment);
                 selector.display();
             } else {
+                environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(
+                        environment.getScriptController().getSource(),
+                        Script.State.STOPPED,
+                        Script.State.RUNNING
+                ));
                 environment.getScriptController().stop();
-                reload.setVisible(false);
-                start.setText("Start");
             }
         });
     }
 
     @Override
     public void notify(ScriptChangeEvent e) {
-        scriptSource = e.getSource();
-
-        System.out.println("Script Changed: " + "New: " + e.getNewState().toString() + " Old: " + e.getOldState().toString());
-
-        switch (e.getNewState()) {
-            case RUNNING: {
-                start.setText("Stop");
-                reload.setVisible(true);
-            }
-            case STOPPED: {
-                start.setText("Start");
-                reload.setVisible(false);
-            }
-        }
+        SwingUtilities.invokeLater(() -> {
+                switch (e.getNewState()) {
+                    case RUNNING: {
+                        start.setText("Stop");
+                        reload.setVisible(true);
+                        break;
+                    }
+                    case STOPPED: {
+                        start.setText("Start");
+                        reload.setVisible(false);
+                        break;
+                    }
+                }
+        });
     }
 
     public static class StartButton extends JButton {
@@ -77,7 +79,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
 
     public static class ReloadButton extends JButton {
 
-        public ReloadButton(Environment environment, ScriptSource source) {
+        public ReloadButton(Environment environment) {
             setText("Reload");
             setVisible(false);
             setFocusPainted(false);
@@ -85,6 +87,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
             setContentAreaFilled(true);
             setFocusable(false);
             addActionListener(e -> {
+                ScriptSource source = environment.getScriptController().getSource();
                 if(source == null) {
                     return;
                 }
@@ -98,7 +101,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 Game.getEventDispatcher().dispatch(new ScriptChangeEvent(source, Script.State.STOPPED, currentState));
                 ScriptBundle bundle = loader.load();
                 bundle.stream().filter(s -> s.shallowEquals(source)).findFirst().ifPresent(reloaded -> {
-                    environment.getScriptController().start(loader.define(reloaded));
+                    environment.getScriptController().start(loader.define(reloaded), reloaded);
                     environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(reloaded, Script.State.RUNNING, Script.State.STOPPED));
                 });
             });

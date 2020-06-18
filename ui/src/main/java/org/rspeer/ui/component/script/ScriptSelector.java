@@ -214,12 +214,12 @@ public class ScriptSelector extends Window<JDialog> {
 
             button.addActionListener(act -> {
                 Script script = loader.define(source);
-                environment.getScriptController().start(script);
+                environment.getScriptController().start(script, source);
 
-               environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(
-                    source,
-                    Script.State.STOPPED,
-                    Script.State.RUNNING
+                environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(
+                        source,
+                        Script.State.RUNNING,
+                        Script.State.STOPPED
                 ));
 
                 dispose();
