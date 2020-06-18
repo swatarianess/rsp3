@@ -9,16 +9,15 @@ import org.rspeer.game.script.ScriptController;
  */
 public class Environment {
 
+    private final EventDispatcher internalDispatcher;
     private final ScriptController scriptController;
     private final BotContext botContext;
-    private final EventDispatcher eventDispatcher;
-
     private BotPreferences preferences;
 
     public Environment() {
         scriptController = new ScriptController();
         botContext = new BotContext();
-        eventDispatcher = new EventDispatcher();
+        internalDispatcher = new EventDispatcher();
     }
 
     public ScriptController getScriptController() {
@@ -29,12 +28,12 @@ public class Environment {
         return botContext;
     }
 
-    public EventDispatcher getEventDispatcher() {
-        return eventDispatcher;
-    }
-
     public BotPreferences getPreferences() {
         return preferences;
+    }
+
+    public EventDispatcher getInternalDispatcher() {
+        return internalDispatcher;
     }
 
     public void setPreferences(BotPreferences preferences) {

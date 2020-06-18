@@ -35,13 +35,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>ui-designer</artifactId>
-            <version>2020.1</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -68,6 +61,24 @@
                         <phase>validate</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>ideauidesigner-maven-plugin</artifactId>
+                <version>1.0-beta-1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javac2</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <fork>true</fork>
+                    <debug>true</debug>
+                    <failOnError>true</failOnError>
+                </configuration>
             </plugin>
         </plugins>
     </build>

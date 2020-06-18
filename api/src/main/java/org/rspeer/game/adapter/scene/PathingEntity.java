@@ -113,6 +113,7 @@ public abstract class PathingEntity<P extends RSPathingEntity> extends Entity<P>
         if (provider == null || provider.getDefinition() == null) {
             return DEFAULT_MAX_HEALTHBAR_WIDTH;
         }
+
         return provider.getDefinition().getMaxWidth();
     }
 
@@ -142,6 +143,7 @@ public abstract class PathingEntity<P extends RSPathingEntity> extends Entity<P>
         } else if (index < 32768) {
             return Npcs.query().indexes(index).results().first();
         }
+
         index -= 32768;
         return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.query().indexes(index).results().first();
     }
