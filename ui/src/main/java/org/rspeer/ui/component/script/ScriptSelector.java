@@ -6,16 +6,16 @@ package org.rspeer.ui.component.script;
     Date: Tuesday - 06/02/2020
 */
 
-import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.event.Event;
 import org.rspeer.game.script.Script;
+import org.rspeer.game.script.event.listener.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptBundle;
+import org.rspeer.game.script.loader.ScriptLoaderProvider;
+import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
-import org.rspeer.game.script.loader.local.LocalScriptLoader;
 import org.rspeer.ui.Window;
 import org.rspeer.ui.component.layout.WrapLayout;
-import org.rspeer.ui.component.menu.BotToolBar.StartButton;
 import org.rspeer.ui.locale.Message;
 
 import javax.imageio.ImageIO;
@@ -31,16 +31,15 @@ public class ScriptSelector extends Window<JDialog> {
 
     private final Environment environment;
     private final Viewport viewport;
-    private final LocalScriptLoader loader;
-    private final StartButton control;
+    private final ScriptProvider loader;
 
-    public ScriptSelector(JFrame parent, Environment environment, StartButton control) {
+    public ScriptSelector(JFrame parent, Environment environment) {
         super(new JDialog(parent, Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()), true));
 
+        ScriptLoaderProvider provider = new ScriptLoaderProvider();
         this.environment = environment;
         this.viewport = initializeViewport();
-        this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
-        this.control = control;
+        this.loader = provider.get();
 
         try {
             frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
@@ -209,9 +208,10 @@ public class ScriptSelector extends Window<JDialog> {
             button.setBorder(null);
 
             button.addActionListener(act -> {
-                Script script = loader.define(source);
-                environment.getScriptController().start(script);
-                control.setText("Stop");
+                environment.getScriptController().start(loader, source);
+                environment.getInternalDispatcher().dispatch(
+                        new ScriptChangeEvent(source, Script.State.RUNNING, Script.State.STOPPED)
+                );
                 dispose();
             });
 
