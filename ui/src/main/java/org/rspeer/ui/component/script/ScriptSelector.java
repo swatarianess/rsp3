@@ -15,6 +15,7 @@ import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.game.script.loader.local.LocalScriptLoader;
 import org.rspeer.ui.Window;
 import org.rspeer.ui.component.layout.WrapLayout;
+import org.rspeer.ui.component.menu.BotToolBar.ReloadButton;
 import org.rspeer.ui.component.menu.BotToolBar.StartButton;
 import org.rspeer.ui.locale.Message;
 
@@ -32,15 +33,17 @@ public class ScriptSelector extends Window<JDialog> {
     private final Environment environment;
     private final Viewport viewport;
     private final LocalScriptLoader loader;
-    private final StartButton control;
+    private final StartButton startButton;
+    private final ReloadButton reloadButton;
 
-    public ScriptSelector(JFrame parent, Environment environment, StartButton control) {
+    public ScriptSelector(JFrame parent, Environment environment, StartButton control, ReloadButton reloadButton) {
         super(new JDialog(parent, Message.SCRIPT_SELECTOR.getActive(environment.getPreferences()), true));
 
         this.environment = environment;
+        this.reloadButton = reloadButton;
         this.viewport = initializeViewport();
         this.loader = new LocalScriptLoader(Configuration.Paths.SCRIPTS_LOCATION);
-        this.control = control;
+        this.startButton = control;
 
         try {
             frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
@@ -211,7 +214,15 @@ public class ScriptSelector extends Window<JDialog> {
             button.addActionListener(act -> {
                 Script script = loader.define(source);
                 environment.getScriptController().start(script);
-                control.setText("Stop");
+                startButton.setText("Stop");
+                reloadButton.addActionListener(restart -> {
+                    environment.getScriptController().stop();
+                    ScriptBundle bundle = loader.load();
+                    bundle.stream().filter(s -> s.shallowEquals(source)).findFirst().ifPresent(reloaded -> {
+                        environment.getScriptController().start(loader.define(reloaded));
+                    });
+                });
+                reloadButton.setVisible(true);
                 dispose();
             });
 
