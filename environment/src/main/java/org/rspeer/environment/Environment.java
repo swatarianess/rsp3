@@ -15,7 +15,7 @@ public class Environment {
     private BotPreferences preferences;
 
     public Environment() {
-        scriptController = new ScriptController();
+        scriptController = new ScriptController(this);
         botContext = new BotContext();
         internalDispatcher = new EventDispatcher();
     }

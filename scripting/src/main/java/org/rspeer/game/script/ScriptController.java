@@ -1,13 +1,20 @@
 package org.rspeer.game.script;
 
+import org.rspeer.environment.Environment;
 import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
 
+    private final Environment environment;
+
     private Script active;
     private ScriptSource source;
     private Thread scriptThread;
+
+    public ScriptController(Environment environment) {
+        this.environment = environment;
+    }
 
     public void start(ScriptProvider provider, ScriptSource source) {
         if (active != null) {
@@ -16,6 +23,7 @@ public class ScriptController {
 
         this.source = source;
         active = provider.define(source);
+        active.setEnvironment(environment);
         active.setState(Script.State.STARTING);
         active.setState(Script.State.RUNNING);
 
