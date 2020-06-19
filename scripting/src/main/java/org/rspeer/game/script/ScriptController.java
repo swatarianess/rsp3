@@ -1,19 +1,19 @@
 package org.rspeer.game.script;
 
-import org.rspeer.environment.Environment;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
 
-    private final Environment environment;
+    private final EventDispatcher internalDispatcher;
 
     private Script active;
     private ScriptSource source;
     private Thread scriptThread;
 
-    public ScriptController(Environment environment) {
-        this.environment = environment;
+    public ScriptController(EventDispatcher internalDispatcher) {
+        this.internalDispatcher = internalDispatcher;
     }
 
     public void start(ScriptProvider provider, ScriptSource source) {
@@ -23,7 +23,8 @@ public class ScriptController {
 
         this.source = source;
         active = provider.define(source);
-        active.setEnvironment(environment);
+        active.setInternalDispatcher(internalDispatcher);
+        active.setSource(source);
         active.setState(Script.State.STARTING);
         active.setState(Script.State.RUNNING);
 
