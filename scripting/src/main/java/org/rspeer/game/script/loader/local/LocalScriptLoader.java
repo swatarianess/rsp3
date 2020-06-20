@@ -32,8 +32,7 @@ public class LocalScriptLoader implements ScriptProvider {
     @Override
     public ScriptBundle load() {
         ScriptBundle bundle = new ScriptBundle();
-        try (URLClassLoader loader = URLClassLoader.newInstance(new URL[]{root.toUri().toURL()})) {
-
+        try {
             Files.find(root,
                        Integer.MAX_VALUE,
                        (path, attr) -> attr.isRegularFile() &&
@@ -41,7 +40,7 @@ public class LocalScriptLoader implements ScriptProvider {
                  .map(Path::toFile)
                  .forEach(file -> {
                      if (file.getName().endsWith(".class")) {
-                         try {
+                         try (URLClassLoader loader = URLClassLoader.newInstance(new URL[]{root.toUri().toURL()})) {
                              String raw = file.getPath();
                              raw = raw.substring(root.toString().length() + 1);
                              raw = raw.substring(0, raw.length() - ".class".length());
@@ -55,30 +54,27 @@ public class LocalScriptLoader implements ScriptProvider {
                          }
                      } else if (file.getName().endsWith(".jar")) {
                          try (JarFile jar = new JarFile(file);
-                              URLClassLoader ucl = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()})) {
+                              URLClassLoader loader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()})) {
                              Enumeration<JarEntry> elems = jar.entries();
                              while (elems.hasMoreElements()) {
-                                 try {
-                                     JarEntry entry = elems.nextElement();
-                                     if (entry.getName().endsWith(".class")) {
-                                         String name = entry.getName();
-                                         name = name.substring(0, name.length() - ".class".length());
-                                         name = name.replace('/', '.');
-                                         Class<?> clazz = ucl.loadClass(name);
-                                         if (test(clazz)) {
-                                             bundle.add(new ScriptSource((Class<? extends Script>) clazz));
-                                         }
+                                 JarEntry entry = elems.nextElement();
+                                 if (entry.getName().endsWith(".class")) {
+                                     String name = entry.getName();
+                                     name = name.substring(0, name.length() - ".class".length());
+                                     name = name.replace('/', '.');
+                                     Class<?> clazz = loader.loadClass(name);
+                                     if (test(clazz)) {
+                                         bundle.add(new ScriptSource((Class<? extends Script>) clazz));
                                      }
-                                 } catch (Throwable e) {
-                                     e.printStackTrace();
                                  }
+
                              }
-                         } catch (IOException e) {
+                         } catch (Throwable e) {
                              e.printStackTrace();
                          }
                      }
                  });
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return bundle;
