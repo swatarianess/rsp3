@@ -10,6 +10,7 @@ public interface ScriptProvider extends Predicate<Class<?>> {
 
     ScriptBundle load();
 
+    // TODO: This should probably go into the ScriptSource class directly
     default Script define(ScriptSource source) {
         try {
             return source.getTarget().getDeclaredConstructor().newInstance();
