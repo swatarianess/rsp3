@@ -2,6 +2,7 @@ package org.rspeer.game.script.loader.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -20,6 +21,11 @@ public class LocalScriptLoader implements ScriptProvider {
 
     public LocalScriptLoader(Path root) {
         this.root = root;
+    }
+
+    @Override
+    public ScriptBundle predefined() {
+        return new ScriptBundle();
     }
 
     @SuppressWarnings("unchecked")
@@ -72,5 +78,14 @@ public class LocalScriptLoader implements ScriptProvider {
             e.printStackTrace();
         }
         return bundle;
+    }
+
+    @Override
+    public Script define(ScriptSource source) {
+        try {
+            return source.getTarget().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            return null;
+        }
     }
 }

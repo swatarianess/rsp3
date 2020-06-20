@@ -102,7 +102,9 @@ public class ScriptSelector extends Window<JDialog> {
         SwingWorker<ScriptBundle, Void> worker = new SwingWorker<ScriptBundle, Void>() {
             @Override
             protected ScriptBundle doInBackground() {
-                return loader.load();
+                ScriptBundle bundle = loader.load();
+                bundle.addAll(loader.predefined());
+                return bundle;
             }
 
             @Override

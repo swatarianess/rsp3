@@ -1,6 +1,5 @@
 package org.rspeer.game.script.loader;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 import org.rspeer.game.script.Script;
@@ -10,14 +9,11 @@ public interface ScriptProvider extends Predicate<Class<?>> {
 
     ScriptBundle load();
 
-    // TODO: This should probably go into the ScriptSource class directly
-    default Script define(ScriptSource source) {
-        try {
-            return source.getTarget().getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            return null;
-        }
+    default ScriptBundle predefined() {
+        return new ScriptBundle();
     }
+
+    Script define(ScriptSource source);
 
     @Override
     default boolean test(Class<?> clazz) {
