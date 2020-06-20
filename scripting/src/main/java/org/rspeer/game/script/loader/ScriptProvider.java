@@ -1,18 +1,13 @@
 package org.rspeer.game.script.loader;
 
-import org.rspeer.game.script.Script;
-import org.rspeer.game.script.ScriptMeta;
-
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
+import org.rspeer.game.script.Script;
+import org.rspeer.game.script.ScriptMeta;
 
 public interface ScriptProvider extends Predicate<Class<?>> {
 
     ScriptBundle load();
-
-    default ScriptBundle predefined() {
-        return new ScriptBundle();
-    }
 
     Script define(ScriptSource source);
 

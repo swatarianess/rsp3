@@ -23,11 +23,6 @@ public class LocalScriptLoader implements ScriptProvider {
         this.root = root;
     }
 
-    @Override
-    public ScriptBundle predefined() {
-        return new ScriptBundle();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public ScriptBundle load() {
