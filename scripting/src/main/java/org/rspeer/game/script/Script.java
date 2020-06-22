@@ -41,6 +41,10 @@ public abstract class Script implements Runnable {
         }
     }
 
+    public State getState() {
+        return state;
+    }
+
     public final ScriptMeta getMeta() {
         return getClass().getAnnotation(ScriptMeta.class);
     }
