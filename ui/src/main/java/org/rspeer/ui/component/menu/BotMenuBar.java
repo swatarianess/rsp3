@@ -1,5 +1,10 @@
 package org.rspeer.ui.component.menu;
 
+import java.util.function.Consumer;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
@@ -10,16 +15,15 @@ import org.rspeer.ui.debug.GameDebug;
 import org.rspeer.ui.debug.explorer.itf.InterfaceExplorer;
 import org.rspeer.ui.locale.Message;
 
-import javax.swing.*;
-import java.util.function.Consumer;
-
 public class BotMenuBar extends JMenuBar {
 
     private static final DebugEntry[] DEBUG_ENTRIES = new DebugEntry[]{
-            new DebugEntry(new JCheckBoxMenuItem("Game"), new GameDebug())
+        new DebugEntry(new JCheckBoxMenuItem("Game"), new GameDebug())
     };
 
     private final Environment environment;
+
+    private JCheckBoxMenuItem renderScene;
 
     public BotMenuBar(Environment environment) {
         this.environment = environment;
@@ -38,7 +42,7 @@ public class BotMenuBar extends JMenuBar {
         JMenu window = new JMenu(Message.WINDOW.getActive(environment.getPreferences()));
 
         JMenuItem onTop = new JCheckBoxMenuItem(Message.ALWAYS_ON_TOP.getActive(environment.getPreferences()),
-                environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
+                                                environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
         onTop.addItemListener(act -> {
             environment.getBotContext().getFrame().setAlwaysOnTop(onTop.isSelected());
             environment.getPreferences().set(AlwaysOnTopPreference.class, onTop.isSelected());
@@ -54,7 +58,7 @@ public class BotMenuBar extends JMenuBar {
         JMenuItem itfs = new JMenuItem("Interfaces");
         itfs.addActionListener(act -> new InterfaceExplorer(environment));
 
-        JCheckBoxMenuItem renderScene = new JCheckBoxMenuItem("Render Scene", true);
+        renderScene = new JCheckBoxMenuItem("Render Scene", true);
         renderScene.addItemListener(evt -> {
             Game.getClient().setSceneRenderingDisabled(!renderScene.isSelected());
             environment.getPreferences().set(SceneRenderPreference.class, renderScene.isSelected());
@@ -94,5 +98,9 @@ public class BotMenuBar extends JMenuBar {
             super(option, debug);
             this.onSelect = onSelect;
         }
+    }
+
+    public JCheckBoxMenuItem getRenderScene() {
+        return renderScene;
     }
 }

@@ -1,21 +1,29 @@
 package org.rspeer.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.event.PreferenceEvent;
+import org.rspeer.environment.preferences.event.PreferenceListener;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
-import org.rspeer.event.Event;
+import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
+import org.rspeer.ui.event.UIEvent;
+import org.rspeer.ui.event.listener.UIListener;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-
-public class BotFrame extends Window<JFrame> {
+public class BotFrame extends Window<JFrame> implements UIListener, PreferenceListener {
 
     private final Environment environment;
 
@@ -27,6 +35,7 @@ public class BotFrame extends Window<JFrame> {
         this.environment = environment;
         applyDefaults();
         applyComponents();
+        applyListeners();
     }
 
     private void applyDefaults() {
@@ -66,6 +75,15 @@ public class BotFrame extends Window<JFrame> {
         //TODO: Implement logger & save its show/hide state in the preferences file
     }
 
+    private void applyListeners() {
+        environment.getInternalDispatcher().subscribe(this);
+        /*
+                Typically, we should add a windowClosing callback for the frame
+                but we're not doing that here since the setDefaultCloseOperation
+                method is taking an EXIT_ON_CLOSE value
+         */
+    }
+
     @Override
     public void display() {
         frame.setVisible(true);
@@ -77,19 +95,28 @@ public class BotFrame extends Window<JFrame> {
     }
 
     @Override
-    public <T extends Event<?>> void accept(T e) {
-        if (e instanceof SplashEvent) {
-            SplashEvent event = (SplashEvent) e;
-            splash.setMessage(event.getMessage());
-        } else if (e instanceof SetAppletEvent) {
-            SetAppletEvent event = (SetAppletEvent) e;
-            if (splash != null) {
-                splash = null;
+    public void notify(UIEvent e) {
+        if (e.getSource() == this) {
+            if (e instanceof SplashEvent) {
+                SplashEvent event = (SplashEvent) e;
+                splash.setMessage(event.getMessage());
+            } else if (e instanceof SetAppletEvent) {
+                SetAppletEvent event = (SetAppletEvent) e;
+                if (splash != null) {
+                    splash = null;
+                }
+                BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
+                Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
+                frame.remove(previousComp);
+                frame.add(event.getApplet(), BorderLayout.CENTER);
             }
-            BorderLayout layout = (BorderLayout) frame.getContentPane().getLayout();
-            Component previousComp = layout.getLayoutComponent(BorderLayout.CENTER);
-            frame.remove(previousComp);
-            frame.add(event.getApplet(), BorderLayout.CENTER);
+        }
+    }
+
+    @Override
+    public void notify(PreferenceEvent e) {
+        if (e.getSource() instanceof SceneRenderPreference) {
+            menu.getRenderScene().setSelected(false);
         }
     }
 }
