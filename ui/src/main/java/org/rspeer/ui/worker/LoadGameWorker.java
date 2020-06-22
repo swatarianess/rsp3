@@ -7,18 +7,19 @@ package org.rspeer.ui.worker;
 */
 
 import jag.game.RSClient;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
+import javax.swing.JFrame;
 import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.event.PreferenceEvent;
+import org.rspeer.environment.preferences.type.BotPreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
 import org.rspeer.ui.Window;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 public class LoadGameWorker extends BotWorker<RSClient, String> {
 
@@ -33,17 +34,20 @@ public class LoadGameWorker extends BotWorker<RSClient, String> {
 
     @Override
     protected void notify(String message) {
-        window.accept(new SplashEvent(window, message));
+        SplashEvent event = new SplashEvent(window, message);
+        environment.getInternalDispatcher().dispatch(event);
     }
 
     @Override
     protected void onFinish() {
         try {
             RSClient client = get();
-            window.accept(new SetAppletEvent(window, client.asApplet()));
+            SetAppletEvent event = new SetAppletEvent(window, client.asApplet());
+            environment.getInternalDispatcher().dispatch(event);
             if (!environment.getPreferences().valueOf(SceneRenderPreference.class)) {
-                //TODO readd this after event dispatcher is finished via PreferenceListener and PerferenceEvent
-                //window.getMenu().getRenderScene().setSelected(false);
+                BotPreference<Boolean> preference = environment.getPreferences().get(SceneRenderPreference.class);
+                PreferenceEvent preferenceEvent = new PreferenceEvent(preference);
+                environment.getInternalDispatcher().dispatch(preferenceEvent);
             }
 
         } catch (InterruptedException | ExecutionException e) {
