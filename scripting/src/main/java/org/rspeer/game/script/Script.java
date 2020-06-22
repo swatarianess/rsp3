@@ -31,11 +31,6 @@ public abstract class Script implements Runnable {
 
     }
 
-    //separate into ScriptStateListener?
-    public void notify(State previous, State current) {
-
-    }
-
     public final void setState(State state) {
         ScriptChangeEvent event = new ScriptChangeEvent(source, state, this.state);
         internalDispatcher.dispatch(event);
