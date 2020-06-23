@@ -1,10 +1,10 @@
 package org.rspeer.game.component;
 
+import jag.game.option.RSClientPreferences;
 import org.rspeer.game.Game;
 import org.rspeer.game.Vars;
 import org.rspeer.game.adapter.component.InterfaceComponent;
 import org.rspeer.game.query.results.ComponentQueryResults;
-import jag.game.option.RSClientPreferences;
 
 import java.util.function.BooleanSupplier;
 

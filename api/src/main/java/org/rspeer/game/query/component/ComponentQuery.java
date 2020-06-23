@@ -1,13 +1,13 @@
 package org.rspeer.game.query.component;
 
+import jag.game.RSClient;
+import jag.game.RSInterfaceComponent;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.component.InterfaceComponent;
 import org.rspeer.game.component.InterfaceComposite;
 import org.rspeer.game.query.Query;
 import org.rspeer.game.query.results.ComponentQueryResults;
-import jag.game.RSClient;
-import jag.game.RSInterfaceComponent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -225,8 +225,8 @@ public class ComponentQuery extends Query<InterfaceComponent, ComponentQuery, Co
 
         if (action != null && !cmp.containsAction(action)) {
             return false;
-        }        
-        
+        }
+
         if (tooltip != null && !tooltip.test(cmp.getToolTip())) {
             return false;
         }
@@ -234,7 +234,7 @@ public class ComponentQuery extends Query<InterfaceComponent, ComponentQuery, Co
         if (widths != null && !ArrayUtils.contains(widths, cmp.getMaterialId())) {
             return false;
         }
-        
+
         return super.test(cmp);
     }
 }

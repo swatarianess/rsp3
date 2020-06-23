@@ -1,8 +1,8 @@
 package org.rspeer.game.adapter.component;
 
+import jag.game.RSStockMarketOffer;
 import org.rspeer.game.adapter.Adapter;
 import org.rspeer.game.component.Item;
-import jag.game.RSStockMarketOffer;
 
 public class StockMarketOffer extends Adapter<RSStockMarketOffer> {
 

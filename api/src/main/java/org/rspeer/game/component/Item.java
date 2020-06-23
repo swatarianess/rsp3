@@ -1,6 +1,7 @@
 package org.rspeer.game.component;
 
 import org.rspeer.commons.Mapping;
+import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Definitions;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.action.ActionOpcode;
@@ -11,7 +12,6 @@ import org.rspeer.game.adapter.scene.definition.ItemDefinition;
 import org.rspeer.game.adapter.type.Identifiable;
 import org.rspeer.game.adapter.type.Interactable;
 import org.rspeer.game.adapter.type.Nameable;
-import org.rspeer.commons.StringCommons;
 import org.rspeer.game.component.tab.Magic;
 
 import java.util.Collections;

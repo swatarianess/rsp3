@@ -1,9 +1,8 @@
 package org.rspeer.ui.event;
 
-import java.applet.Applet;
-import org.rspeer.event.listener.EventListener;
 import org.rspeer.ui.Window;
-import org.rspeer.ui.event.listener.UIListener;
+
+import java.applet.Applet;
 
 public class SetAppletEvent extends UIEvent {
 
@@ -22,10 +21,5 @@ public class SetAppletEvent extends UIEvent {
 
     public Applet getApplet() {
         return applet;
-    }
-
-    @Override
-    public void dispatch(EventListener listener) {
-        ((UIListener) listener).notify(this);
     }
 }

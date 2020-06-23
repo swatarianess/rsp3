@@ -1,5 +1,9 @@
 package org.rspeer.game.adapter.component;
 
+import jag.RSIntegerNode;
+import jag.RSNodeTable;
+import jag.game.RSInterfaceComponent;
+import jag.game.RSSubInterface;
 import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.Action;
@@ -16,10 +20,6 @@ import org.rspeer.game.component.InterfaceAddress;
 import org.rspeer.game.component.Item;
 import org.rspeer.game.component.tab.Magic;
 import org.rspeer.game.query.component.ComponentQuery;
-import jag.RSIntegerNode;
-import jag.RSNodeTable;
-import jag.game.RSInterfaceComponent;
-import jag.game.RSSubInterface;
 
 import java.awt.*;
 import java.util.ArrayList;

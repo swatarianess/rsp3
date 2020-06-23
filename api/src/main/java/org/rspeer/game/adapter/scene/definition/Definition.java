@@ -1,11 +1,11 @@
 package org.rspeer.game.adapter.scene.definition;
 
+import jag.game.type.RSDefinition;
+import org.rspeer.commons.StringCommons;
 import org.rspeer.game.adapter.Adapter;
 import org.rspeer.game.adapter.type.Actionable;
 import org.rspeer.game.adapter.type.Identifiable;
 import org.rspeer.game.adapter.type.Nameable;
-import org.rspeer.commons.StringCommons;
-import jag.game.type.RSDefinition;
 
 import java.util.ArrayList;
 import java.util.Collections;

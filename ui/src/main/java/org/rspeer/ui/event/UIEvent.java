@@ -2,9 +2,8 @@ package org.rspeer.ui.event;
 
 import org.rspeer.event.Event;
 import org.rspeer.ui.Window;
-import org.rspeer.ui.event.listener.UIListener;
 
-public abstract class UIEvent extends Event<Window<?>, UIListener> {
+public abstract class UIEvent extends Event<Window<?>> {
 
     /**
      * Constructs a prototypical Event.
@@ -12,7 +11,7 @@ public abstract class UIEvent extends Event<Window<?>, UIListener> {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public UIEvent(Window source) {
-        super(source, UIListener.class);
+    public UIEvent(Window<?> source) {
+        super(source);
     }
 }

@@ -1,5 +1,7 @@
 package org.rspeer.game.query.scene;
 
+import jag.game.scene.RSTile;
+import jag.game.scene.entity.RSSceneObject;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.game.adapter.scene.Player;
 import org.rspeer.game.adapter.scene.SceneObject;
@@ -11,8 +13,6 @@ import org.rspeer.game.position.Position;
 import org.rspeer.game.query.results.SceneNodeQueryResults;
 import org.rspeer.game.scene.Players;
 import org.rspeer.game.scene.Scene;
-import jag.game.scene.RSTile;
-import jag.game.scene.entity.RSSceneObject;
 
 import java.util.ArrayList;
 import java.util.Collection;

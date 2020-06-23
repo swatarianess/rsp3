@@ -1,14 +1,14 @@
 package org.rspeer.game.action.tree;
 
+import jag.game.scene.RSSceneGraph;
+import jag.game.scene.RSTile;
+import jag.game.scene.entity.RSSceneObject;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.action.ActionOpcode;
 import org.rspeer.game.adapter.scene.SceneObject;
 import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Scene;
-import jag.game.scene.RSSceneGraph;
-import jag.game.scene.RSTile;
-import jag.game.scene.entity.RSSceneObject;
 
 import java.util.List;
 

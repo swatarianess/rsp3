@@ -1,10 +1,10 @@
 package org.rspeer.game.scene;
 
+import jag.game.RSClient;
+import jag.game.scene.entity.RSNpc;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Npc;
 import org.rspeer.game.query.scene.NpcQuery;
-import jag.game.RSClient;
-import jag.game.scene.entity.RSNpc;
 
 import java.util.ArrayList;
 import java.util.List;

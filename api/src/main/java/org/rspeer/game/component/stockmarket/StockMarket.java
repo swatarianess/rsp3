@@ -1,9 +1,9 @@
 package org.rspeer.game.component.stockmarket;
 
+import jag.game.RSStockMarketOffer;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.component.StockMarketOffer;
 import org.rspeer.game.query.component.StockMarketOfferQuery;
-import jag.game.RSStockMarketOffer;
 
 import java.util.ArrayList;
 import java.util.Collections;

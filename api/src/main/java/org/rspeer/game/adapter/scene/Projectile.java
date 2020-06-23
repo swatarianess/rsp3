@@ -1,5 +1,6 @@
 package org.rspeer.game.adapter.scene;
 
+import jag.game.scene.entity.RSProjectile;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.adapter.type.Identifiable;
@@ -8,7 +9,6 @@ import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Npcs;
 import org.rspeer.game.scene.Players;
 import org.rspeer.game.scene.Scene;
-import jag.game.scene.entity.RSProjectile;
 
 import java.util.List;
 

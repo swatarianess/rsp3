@@ -1,9 +1,9 @@
 package org.rspeer.game.provider.callback;
 
+import jag.game.RSClient;
 import org.rspeer.commons.Random;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.Action;
-import jag.game.RSClient;
 
 import java.awt.*;
 import java.util.Iterator;

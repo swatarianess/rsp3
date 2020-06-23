@@ -1,5 +1,7 @@
 package org.rspeer.game.adapter.component;
 
+import jag.RSNodeTable;
+import jag.game.RSInventory;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.Adapter;
 import org.rspeer.game.adapter.component.tab.Backpack;
@@ -9,8 +11,6 @@ import org.rspeer.game.query.component.ComponentQuery;
 import org.rspeer.game.query.component.ItemQuery;
 import org.rspeer.game.query.results.ComponentQueryResults;
 import org.rspeer.game.query.results.ItemQueryResults;
-import jag.RSNodeTable;
-import jag.game.RSInventory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -167,7 +167,7 @@ public class Inventory extends Adapter<RSInventory> {
 
     public enum DataSource {
         INVENTORY, //itemtable
-        COMPONENT;
+        COMPONENT
     }
 
     public enum Format {

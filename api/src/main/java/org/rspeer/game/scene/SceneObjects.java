@@ -1,11 +1,11 @@
 package org.rspeer.game.scene;
 
+import jag.game.scene.RSTile;
+import jag.game.scene.entity.RSSceneObject;
 import org.rspeer.game.adapter.scene.SceneObject;
 import org.rspeer.game.position.Position;
 import org.rspeer.game.position.RelativePosition;
 import org.rspeer.game.query.scene.SceneObjectQuery;
-import jag.game.scene.RSTile;
-import jag.game.scene.entity.RSSceneObject;
 
 import java.util.ArrayList;
 import java.util.List;

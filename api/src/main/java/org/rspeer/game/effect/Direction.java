@@ -14,7 +14,7 @@ public enum Direction {
     private final int xOffset;
     private final int yOffset;
 
-    Direction(int xOffset, int yOffset){
+    Direction(int xOffset, int yOffset) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
     }

@@ -1,5 +1,6 @@
 package org.rspeer.game.movement;
 
+import jag.game.RSClient;
 import org.rspeer.game.Game;
 import org.rspeer.game.Vars;
 import org.rspeer.game.action.ActionOpcode;
@@ -9,9 +10,6 @@ import org.rspeer.game.adapter.type.SceneNode;
 import org.rspeer.game.component.Interfaces;
 import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Scene;
-import jag.game.RSClient;
-
-import java.util.*;
 
 public class Movement {
 

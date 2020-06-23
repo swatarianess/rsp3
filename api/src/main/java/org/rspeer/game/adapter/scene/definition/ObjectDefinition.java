@@ -1,7 +1,7 @@
 package org.rspeer.game.adapter.scene.definition;
 
-import org.rspeer.game.Definitions;
 import jag.game.type.RSObjectDefinition;
+import org.rspeer.game.Definitions;
 
 public class ObjectDefinition extends TransformableDefinition<RSObjectDefinition, ObjectDefinition> {
 

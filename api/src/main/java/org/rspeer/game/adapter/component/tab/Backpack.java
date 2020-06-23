@@ -1,5 +1,6 @@
 package org.rspeer.game.adapter.component.tab;
 
+import jag.game.RSInventory;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.ActionOpcode;
 import org.rspeer.game.action.tree.ItemAction;
@@ -16,7 +17,6 @@ import org.rspeer.game.adapter.type.Interactable;
 import org.rspeer.game.component.InventoryType;
 import org.rspeer.game.component.Item;
 import org.rspeer.game.query.component.ItemQuery;
-import jag.game.RSInventory;
 
 import java.util.function.Function;
 

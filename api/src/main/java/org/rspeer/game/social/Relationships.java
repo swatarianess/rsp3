@@ -1,12 +1,12 @@
 package org.rspeer.game.social;
 
+import jag.game.relationship.*;
 import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.social.Associate;
 import org.rspeer.game.adapter.social.Chatter;
 import org.rspeer.game.query.social.AssociateQuery;
 import org.rspeer.game.query.social.RelationshipQuery;
-import jag.game.relationship.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -112,7 +112,7 @@ public class Relationships {
 
     public enum Context {
         FRIENDS_LIST,
-        IGNORE_LIST;
+        IGNORE_LIST
     }
 
     public static class Clan {

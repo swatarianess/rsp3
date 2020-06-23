@@ -1,7 +1,7 @@
 package org.rspeer.game.query.results;
 
-import org.rspeer.game.adapter.social.Associate;
 import jag.game.relationship.RSAssociate;
+import org.rspeer.game.adapter.social.Associate;
 
 import java.util.Collection;
 import java.util.Comparator;

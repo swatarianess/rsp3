@@ -159,7 +159,7 @@ public class Magic {
         }
 
         public enum Mode {
-            DEFENSIVE, OFFENSIVE;
+            DEFENSIVE, OFFENSIVE
         }
     }
 }

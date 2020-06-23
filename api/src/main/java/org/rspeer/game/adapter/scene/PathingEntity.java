@@ -1,5 +1,10 @@
 package org.rspeer.game.adapter.scene;
 
+import jag.RSLinkedList;
+import jag.RSNode;
+import jag.game.RSHealthBar;
+import jag.game.RSHitUpdate;
+import jag.game.scene.entity.RSPathingEntity;
 import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.type.Animable;
@@ -13,11 +18,6 @@ import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Npcs;
 import org.rspeer.game.scene.Players;
 import org.rspeer.game.scene.Scene;
-import jag.RSLinkedList;
-import jag.RSNode;
-import jag.game.RSHealthBar;
-import jag.game.RSHitUpdate;
-import jag.game.scene.entity.RSPathingEntity;
 
 public abstract class PathingEntity<P extends RSPathingEntity> extends Entity<P>
         implements Nameable, Identifiable, Animable, Mobile {

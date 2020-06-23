@@ -2,10 +2,10 @@ package org.rspeer.ui.debug.explorer.itf;
 
 import org.rspeer.commons.AWTUtil;
 import org.rspeer.environment.Environment;
+import org.rspeer.event.Subscribe;
 import org.rspeer.game.Game;
 import org.rspeer.game.component.Interfaces;
 import org.rspeer.game.event.RenderEvent;
-import org.rspeer.game.event.listener.RenderListener;
 import org.rspeer.ui.locale.Message;
 
 import javax.imageio.ImageIO;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 //TODO: Add separate viewport & info refresh buttons
-public class InterfaceExplorer extends JFrame implements RenderListener {
+public class InterfaceExplorer extends JFrame {
 
     private static final int VIEWPORT_WIDTH = 220;
     private static final int INFO_WIDTH = 360;
@@ -95,7 +95,7 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
         return panel;
     }
 
-    @Override
+    @Subscribe
     public void notify(RenderEvent e) {
         Graphics g = e.getSource();
         if (render instanceof ComponentNode) {

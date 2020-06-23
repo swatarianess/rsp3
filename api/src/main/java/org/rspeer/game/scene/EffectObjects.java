@@ -1,11 +1,11 @@
 package org.rspeer.game.scene;
 
+import jag.RSNodeDeque;
+import jag.game.scene.entity.RSEffectObject;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.NodeDeque;
 import org.rspeer.game.adapter.scene.EffectObject;
 import org.rspeer.game.query.scene.EffectObjectQuery;
-import jag.RSNodeDeque;
-import jag.game.scene.entity.RSEffectObject;
 
 import java.util.ArrayList;
 import java.util.Collections;

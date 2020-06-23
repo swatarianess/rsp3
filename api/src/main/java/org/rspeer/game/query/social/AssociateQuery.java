@@ -1,9 +1,9 @@
 package org.rspeer.game.query.social;
 
+import jag.game.relationship.RSAssociate;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.game.adapter.social.Associate;
 import org.rspeer.game.query.results.AssociateQueryResults;
-import jag.game.relationship.RSAssociate;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.rspeer.game.adapter.scene.definition;
 
-import org.rspeer.game.Vars;
 import jag.game.type.RSTransformableDefinition;
+import org.rspeer.game.Vars;
 
 import java.util.function.Function;
 

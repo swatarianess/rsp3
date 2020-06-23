@@ -1,10 +1,8 @@
 package org.rspeer.game.query.scene;
 
-import jag.game.scene.entity.RSNpc;
 import jag.game.scene.entity.RSPathingEntity;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.commons.Range;
-import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Npc;
 import org.rspeer.game.adapter.scene.PathingEntity;
 import org.rspeer.game.adapter.scene.Player;
@@ -17,7 +15,6 @@ import org.rspeer.game.scene.Players;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class PathingEntityQuery<

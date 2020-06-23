@@ -1,11 +1,8 @@
 package org.rspeer.event;
 
 import java.util.EventObject;
-import org.rspeer.event.listener.EventListener;
 
-public abstract class Event<T, V extends EventListener> extends EventObject {
-
-    private final Class<V> listenerClass;
+public abstract class Event<T> extends EventObject {
 
     /**
      * Constructs a prototypical Event.
@@ -13,9 +10,8 @@ public abstract class Event<T, V extends EventListener> extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public Event(T source, Class<V> listenerClass) {
+    public Event(T source) {
         super(source);
-        this.listenerClass = listenerClass;
     }
 
     @SuppressWarnings("unchecked")
@@ -23,10 +19,4 @@ public abstract class Event<T, V extends EventListener> extends EventObject {
     public T getSource() {
         return (T) super.getSource();
     }
-
-    public Class<V> getListenerClass() {
-        return listenerClass;
-    }
-
-    public abstract void dispatch(EventListener listener);
 }

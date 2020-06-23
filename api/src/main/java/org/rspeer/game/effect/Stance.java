@@ -1,7 +1,7 @@
 package org.rspeer.game.effect;
 
-import org.rspeer.game.adapter.scene.PathingEntity;
 import jag.game.scene.entity.RSPathingEntity;
+import org.rspeer.game.adapter.scene.PathingEntity;
 
 public class Stance extends Animation {
 

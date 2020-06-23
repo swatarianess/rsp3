@@ -23,7 +23,7 @@ public class ItemQuery extends Query<Item, ItemQuery, ItemQueryResults> implemen
     private Boolean stackable = null;
     private Boolean noted = null;
 
-    private Range count = null;
+    private final Range count = null;
     private Range stackSize = null;
 
     private int[] ids = null;

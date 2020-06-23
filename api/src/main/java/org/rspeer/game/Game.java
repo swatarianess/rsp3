@@ -1,10 +1,12 @@
 package org.rspeer.game;
 
-import org.rspeer.game.action.Action;
-import org.rspeer.event.EventDispatcher;
-import org.rspeer.game.provider.callback.EventMediator;
 import jag.game.RSClient;
 import jag.game.option.RSClientPreferences;
+import org.rspeer.event.EventDispatcher;
+import org.rspeer.event.Processor;
+import org.rspeer.event.Registry;
+import org.rspeer.game.action.Action;
+import org.rspeer.game.provider.callback.EventMediator;
 
 import java.awt.*;
 
@@ -27,7 +29,13 @@ public class Game {
     public static synchronized void setClient(RSClient client) {
         Game.client = client;
         client.setEventMediator(new EventMediator());
-        client.setEventDispatcher(new EventDispatcher());
+        client.setEventDispatcher(
+                new EventDispatcher.Factory("client")
+                        .processor(new Processor.Immediate())
+                        .registry(new Registry.Reflective())
+                        .handler(Throwable::printStackTrace)
+                        .get()
+        );
     }
 
     public static void queueAction(Action action) {

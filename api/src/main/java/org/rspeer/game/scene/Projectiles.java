@@ -1,11 +1,11 @@
 package org.rspeer.game.scene;
 
+import jag.RSNodeDeque;
+import jag.game.scene.entity.RSProjectile;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.NodeDeque;
 import org.rspeer.game.adapter.scene.Projectile;
 import org.rspeer.game.query.scene.ProjectileQuery;
-import jag.RSNodeDeque;
-import jag.game.scene.entity.RSProjectile;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -103,7 +103,7 @@ public enum InterfaceComposite {
     BARROWS_REWARD(155),
 
     MOTHERLODE_MINE(382),
-    
+
     PARTY_ROOM_CHEST(265),
     PARTY_ROOM_INVENTORY(266),
 

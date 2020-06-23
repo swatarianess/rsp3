@@ -3,15 +3,16 @@ package org.rspeer.environment.preferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.environment.preferences.type.BotPreference;
 import org.rspeer.environment.preferences.type.LocalePreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings(value = "all")
 public class BotPreferences {

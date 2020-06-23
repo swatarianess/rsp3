@@ -1,9 +1,9 @@
 package org.rspeer.game.component;
 
+import jag.game.RSInterfaceComponent;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.component.InterfaceComponent;
 import org.rspeer.game.query.component.ComponentQuery;
-import jag.game.RSInterfaceComponent;
 
 public class Interfaces {
 

@@ -6,14 +6,14 @@ import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
 
-    private final EventDispatcher internalDispatcher;
+    private final EventDispatcher eventDispatcher;
 
     private Script active;
     private ScriptSource source;
     private Thread scriptThread;
 
-    public ScriptController(EventDispatcher internalDispatcher) {
-        this.internalDispatcher = internalDispatcher;
+    public ScriptController(EventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
     }
 
     public void start(ScriptProvider provider, ScriptSource source) {
@@ -23,7 +23,7 @@ public class ScriptController {
 
         this.source = source;
         active = provider.define(source);
-        active.setInternalDispatcher(internalDispatcher);
+        active.setEventDispatcher(eventDispatcher);
         active.setSource(source);
         active.setState(Script.State.STARTING);
         active.setState(Script.State.RUNNING);

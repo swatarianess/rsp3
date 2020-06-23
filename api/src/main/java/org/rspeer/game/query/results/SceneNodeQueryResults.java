@@ -1,8 +1,8 @@
 package org.rspeer.game.query.results;
 
-import org.rspeer.game.adapter.type.SceneNode;
 import org.rspeer.commons.math.Distance;
 import org.rspeer.commons.math.DistanceEvaluator;
+import org.rspeer.game.adapter.type.SceneNode;
 import org.rspeer.game.scene.Players;
 
 import java.util.Collection;

@@ -1,10 +1,10 @@
 package org.rspeer.game.adapter.component;
 
+import jag.game.RSInventory;
 import org.rspeer.commons.Time;
 import org.rspeer.game.adapter.scene.SceneObject;
 import org.rspeer.game.component.*;
 import org.rspeer.game.scene.SceneObjects;
-import jag.game.RSInventory;
 
 import java.util.function.Predicate;
 

@@ -35,7 +35,7 @@ public class LoadGameWorker extends BotWorker<RSClient, String> {
     @Override
     protected void notify(String message) {
         SplashEvent event = new SplashEvent(window, message);
-        environment.getInternalDispatcher().dispatch(event);
+        environment.getEventDispatcher().dispatch(event);
     }
 
     @Override
@@ -43,11 +43,11 @@ public class LoadGameWorker extends BotWorker<RSClient, String> {
         try {
             RSClient client = get();
             SetAppletEvent event = new SetAppletEvent(window, client.asApplet());
-            environment.getInternalDispatcher().dispatch(event);
+            environment.getEventDispatcher().dispatch(event);
             if (!environment.getPreferences().valueOf(SceneRenderPreference.class)) {
                 BotPreference<Boolean> preference = environment.getPreferences().get(SceneRenderPreference.class);
                 PreferenceEvent preferenceEvent = new PreferenceEvent(preference);
-                environment.getInternalDispatcher().dispatch(preferenceEvent);
+                environment.getEventDispatcher().dispatch(preferenceEvent);
             }
 
         } catch (InterruptedException | ExecutionException e) {

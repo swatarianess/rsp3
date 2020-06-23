@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface Area {
 
+    static Area rectangular(Position a, Position b) {
+        return new RectangularArea(a.getFloorLevel(), a, b);
+    }
+
     int getFloorLevel();
 
     List<Position> getTiles();
 
     boolean contains(SceneNode entity);
-
-    static Area rectangular(Position a, Position b) {
-        return new RectangularArea(a.getFloorLevel(), a, b);
-    }
 }

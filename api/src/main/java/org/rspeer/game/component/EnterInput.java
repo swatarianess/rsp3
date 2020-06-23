@@ -69,8 +69,7 @@ public class EnterInput {
         MESSAGE_BEFRIENDED_PLAYER(6),
         SET_A_NAME(13), //"You must set a name before you can chat."
         BANK_ITEM_SEARCH(11),
-        PUBLIC_CHAT_FILTER(548)
-        ;
+        PUBLIC_CHAT_FILTER(548);
 
         private final int id;
 

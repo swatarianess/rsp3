@@ -1,8 +1,8 @@
 package org.rspeer.game;
 
-import org.rspeer.commons.Mapping;
-import org.rspeer.commons.IntToIntFunction;
 import jag.game.type.RSVarpbit;
+import org.rspeer.commons.IntToIntFunction;
+import org.rspeer.commons.Mapping;
 
 public class Vars {
 

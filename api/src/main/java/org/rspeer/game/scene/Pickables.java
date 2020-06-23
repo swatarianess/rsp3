@@ -1,12 +1,12 @@
 package org.rspeer.game.scene;
 
+import jag.RSNodeDeque;
+import jag.game.scene.entity.RSPickable;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.NodeDeque;
 import org.rspeer.game.adapter.scene.Pickable;
 import org.rspeer.game.position.Position;
 import org.rspeer.game.query.scene.PickableQuery;
-import jag.RSNodeDeque;
-import jag.game.scene.entity.RSPickable;
 
 import java.util.ArrayList;
 import java.util.List;

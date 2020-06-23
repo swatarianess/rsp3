@@ -1,11 +1,11 @@
 package org.rspeer.game.query.social;
 
+import jag.game.relationship.RSChatter;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.game.adapter.social.Chatter;
 import org.rspeer.game.adapter.type.Nameable;
 import org.rspeer.game.query.Query;
 import org.rspeer.game.query.results.RelationshipQueryResults;
-import jag.game.relationship.RSChatter;
 
 import java.util.Collection;
 import java.util.List;

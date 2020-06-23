@@ -1,19 +1,19 @@
 package org.rspeer.ui.debug;
 
 import org.rspeer.commons.AWTUtil;
+import org.rspeer.event.Subscribe;
 import org.rspeer.game.event.RenderEvent;
-import org.rspeer.game.event.listener.RenderListener;
 
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Debug implements RenderListener {
+public abstract class Debug {
 
     private int y = 45;
     private List<String> entries = new LinkedList<>();
 
-    @Override
+    @Subscribe
     public final void notify(RenderEvent e) {
         Graphics2D g = (Graphics2D) e.getSource();
         render(g);

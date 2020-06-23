@@ -6,13 +6,12 @@ import org.rspeer.commons.Executor;
 import org.rspeer.commons.Time;
 import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.Game;
-import org.rspeer.game.script.event.listener.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptSource;
 
 //TODO make this better, add random handling (login screen, welcome screen etc)
 public abstract class Script implements Runnable {
 
-    private EventDispatcher internalDispatcher;
+    private EventDispatcher eventDispatcher;
     private ScriptSource source;
 
     private State state = State.STOPPED;
@@ -32,8 +31,6 @@ public abstract class Script implements Runnable {
     }
 
     public final void setState(State state) {
-        ScriptChangeEvent event = new ScriptChangeEvent(source, state, this.state);
-        internalDispatcher.dispatch(event);
         this.state = state;
         if (state == State.STOPPED) {
             Executor.execute(this::onFinish);
@@ -42,8 +39,8 @@ public abstract class Script implements Runnable {
         }
     }
 
-    public final void setInternalDispatcher(EventDispatcher internalDispatcher) {
-        this.internalDispatcher = internalDispatcher;
+    public final void setEventDispatcher(EventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
     }
 
     public final void setSource(ScriptSource source) {

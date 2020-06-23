@@ -1,9 +1,9 @@
 package org.rspeer.ui.component.menu;
 
 import org.rspeer.environment.Environment;
+import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.Script;
-import org.rspeer.game.script.event.listener.ScriptChangeEvent;
-import org.rspeer.game.script.event.listener.ScriptChangeListener;
+import org.rspeer.game.script.event.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptBundle;
 import org.rspeer.game.script.loader.ScriptLoaderProvider;
 import org.rspeer.game.script.loader.ScriptProvider;
@@ -12,13 +12,13 @@ import org.rspeer.ui.component.script.ScriptSelector;
 
 import javax.swing.*;
 
-public class BotToolBar extends JToolBar implements ScriptChangeListener {
+public class BotToolBar extends JToolBar {
 
     private final StartButton start;
     private final ReloadButton reload;
 
     public BotToolBar(Environment environment) {
-        environment.getInternalDispatcher().subscribe(this);
+        environment.getEventDispatcher().subscribe(this);
 
         setFloatable(false);
 
@@ -35,7 +35,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 ScriptSelector selector = new ScriptSelector(environment.getBotContext().getFrame(), environment);
                 selector.display();
             } else {
-                environment.getInternalDispatcher().dispatch(new ScriptChangeEvent(
+                environment.getEventDispatcher().dispatch(new ScriptChangeEvent(
                         environment.getScriptController().getSource(),
                         Script.State.STOPPED,
                         Script.State.RUNNING
@@ -45,7 +45,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
         });
     }
 
-    @Override
+    @Subscribe
     public void notify(ScriptChangeEvent e) {
         SwingUtilities.invokeLater(() -> {
             switch (e.getState()) {
@@ -94,7 +94,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 }
                 ScriptProvider loader = new ScriptLoaderProvider().get();
                 Script.State currentState = currentScript.getState();
-                environment.getInternalDispatcher().dispatch(
+                environment.getEventDispatcher().dispatch(
                         new ScriptChangeEvent(source, Script.State.STOPPED, currentState)
                 );
                 environment.getScriptController().stop();
@@ -103,7 +103,7 @@ public class BotToolBar extends JToolBar implements ScriptChangeListener {
                 ScriptSource reloaded = bundle.findShallow(source);
                 if (reloaded != null) {
                     environment.getScriptController().start(loader, reloaded);
-                    environment.getInternalDispatcher().dispatch(
+                    environment.getEventDispatcher().dispatch(
                             new ScriptChangeEvent(reloaded, Script.State.RUNNING, Script.State.STOPPED)
                     );
                 }

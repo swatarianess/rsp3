@@ -1,9 +1,9 @@
 package org.rspeer.game.adapter.scene;
 
+import jag.game.scene.entity.RSEffectObject;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.adapter.type.Identifiable;
 import org.rspeer.game.position.Position;
-import jag.game.scene.entity.RSEffectObject;
 
 import java.util.List;
 

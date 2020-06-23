@@ -1,7 +1,7 @@
 package org.rspeer.game.query.results;
 
-import org.rspeer.game.adapter.social.Chatter;
 import jag.game.relationship.RSChatter;
+import org.rspeer.game.adapter.social.Chatter;
 
 import java.util.Collection;
 import java.util.Comparator;

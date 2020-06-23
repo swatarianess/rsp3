@@ -1,10 +1,10 @@
 package org.rspeer.game.scene;
 
+import jag.game.RSClient;
+import jag.game.scene.entity.RSPlayer;
 import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Player;
 import org.rspeer.game.query.scene.PlayerQuery;
-import jag.game.RSClient;
-import jag.game.scene.entity.RSPlayer;
 
 import java.util.ArrayList;
 import java.util.List;

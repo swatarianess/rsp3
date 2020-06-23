@@ -85,7 +85,7 @@ public class Time {
      * @param max the max amount of milliseconds to sleep for
      */
     public static void sleep(int min, int max) {
-        sleep((long) min, (long) max);
+        sleep(min, max);
     }
 
     /**

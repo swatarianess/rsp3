@@ -1,76 +1,70 @@
 package org.rspeer.event;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
-import org.rspeer.event.listener.EventListener;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+@SuppressWarnings("rawtypes")
 public class EventDispatcher {
 
-    private final Map<Class<?>, Set<EventListener>> listeners = new ConcurrentHashMap<>();
+    private final Registry registry;
+    private final String name;
+    private final Processor processor;
+    private final Consumer<Throwable> handler;
 
-    public void subscribe(EventListener el) {
-        Set<Class<?>> interfaces = getListenerInterfaces(el.getClass());
-        interfaces.forEach(group -> {
-            if (!listeners.containsKey(group)) {
-                listeners.put(group, new CopyOnWriteArraySet<>());
-            }
-            listeners.get(group).add(el);
-        });
+    private EventDispatcher(String name, Registry registry, Processor processor, Consumer<Throwable> handler) {
+        this.name = name;
+        this.registry = registry;
+        this.processor = processor;
+        this.handler = handler;
     }
 
-    public void unsubscribe(EventListener el) {
-        Set<Class<?>> interfaces = getListenerInterfaces(el.getClass());
-        interfaces.forEach(group -> {
-            if (listeners.containsKey(group)) {
-                Set<EventListener> listenersGroup = listeners.get(group);
-                listenersGroup.remove(el);
-
-                if (listenersGroup.isEmpty()) {
-                    listeners.remove(group);
-                }
-            }
-        });
+    @Override
+    public String toString() {
+        return name;
     }
 
-    public void dispatch(Event<?, ?> e) {
-        Class<?> group = e.getListenerClass();
-        Set<EventListener> listenersGroup = listeners.getOrDefault(group, Collections.emptySet());
-        listenersGroup.forEach(e::dispatch);
+    public void subscribe(Object instance) {
+        registry.subscribe(instance);
     }
 
-    private Set<Class<?>> getListenerInterfaces(Class<?> clazz) {
-        Set<Class<?>> interfaces = new HashSet<>();
-        if (clazz != null && !clazz.equals(Object.class)) {
-            // First we check the directly implemented interfaces
-            Set<Class<?>> impl = Arrays.stream(clazz.getInterfaces())
-                                       .filter(this::isEventListenerInterface)
-                                       .collect(Collectors.toSet());
-            interfaces.addAll(impl);
+    public void unsubscribe(Object instance) {
+        registry.unsubscribe(instance);
+    }
 
-            // Then we check interfaces implemented by the SuperClass
-            Class<?> superClass = clazz.getSuperclass();
-            Set<Class<?>> superImpl = getListenerInterfaces(superClass);
-            interfaces.addAll(superImpl);
+    public void dispatch(Event event) {
+        processor.accept(event, registry.getSubscriptions());
+    }
+
+    public static class Factory implements Supplier<EventDispatcher> {
+
+        private final String name;
+
+        private Registry registry = new Registry.Reflective();
+        private Processor processor = new Processor.Immediate();
+        private Consumer<Throwable> handler = Throwable::printStackTrace;
+
+        public Factory(String name) {
+            this.name = name;
         }
-        return interfaces;
-    }
 
-    private boolean isEventListenerInterface(Class<?> clazz) {
-        if (clazz.isInterface()) {
-            // First we check if the class itself is an EventListener
-            if (clazz.equals(EventListener.class)) {
-                return true;
-            }
-            // Then we check if any of the SuperInterfaces is an EventListener
-            return Arrays.stream(clazz.getInterfaces())
-                         .anyMatch(this::isEventListenerInterface);
+        public Factory registry(Registry registry) {
+            this.registry = registry;
+            return this;
         }
-        return false;
+
+        public Factory processor(Processor processor) {
+            this.processor = processor;
+            return this;
+        }
+
+        public Factory handler(Consumer<Throwable> handler) {
+            this.handler = handler;
+            return this;
+        }
+
+        @Override
+        public EventDispatcher get() {
+            return new EventDispatcher(name, registry, processor, handler);
+        }
     }
 }

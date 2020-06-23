@@ -1,7 +1,7 @@
 package org.rspeer.game.adapter.scene.definition;
 
-import org.rspeer.game.Definitions;
 import jag.game.type.RSNpcDefinition;
+import org.rspeer.game.Definitions;
 
 public class NpcDefinition extends TransformableDefinition<RSNpcDefinition, NpcDefinition> {
 

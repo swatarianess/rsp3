@@ -1,29 +1,24 @@
 package org.rspeer.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.event.PreferenceEvent;
-import org.rspeer.environment.preferences.event.PreferenceListener;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
+import org.rspeer.event.Subscribe;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
 import org.rspeer.ui.event.UIEvent;
-import org.rspeer.ui.event.listener.UIListener;
 
-public class BotFrame extends Window<JFrame> implements UIListener, PreferenceListener {
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
+public class BotFrame extends Window<JFrame> {
 
     private final Environment environment;
 
@@ -76,7 +71,7 @@ public class BotFrame extends Window<JFrame> implements UIListener, PreferenceLi
     }
 
     private void applyListeners() {
-        environment.getInternalDispatcher().subscribe(this);
+        environment.getEventDispatcher().subscribe(this);
         /*
                 Typically, we should add a windowClosing callback for the frame
                 but we're not doing that here since the setDefaultCloseOperation
@@ -94,7 +89,7 @@ public class BotFrame extends Window<JFrame> implements UIListener, PreferenceLi
         frame.dispose();
     }
 
-    @Override
+    @Subscribe
     public void notify(UIEvent e) {
         if (e.getSource() == this) {
             if (e instanceof SplashEvent) {
@@ -113,7 +108,7 @@ public class BotFrame extends Window<JFrame> implements UIListener, PreferenceLi
         }
     }
 
-    @Override
+    @Subscribe
     public void notify(PreferenceEvent e) {
         if (e.getSource() instanceof SceneRenderPreference) {
             menu.getRenderScene().setSelected(false);

@@ -1,15 +1,15 @@
 package org.rspeer.game.adapter.scene;
 
+import jag.game.scene.entity.RSNpc;
+import jag.game.type.RSNpcDefinition;
+import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Definitions;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.action.ActionOpcode;
 import org.rspeer.game.action.tree.NpcAction;
 import org.rspeer.game.adapter.component.Inventory;
 import org.rspeer.game.adapter.scene.definition.NpcDefinition;
-import org.rspeer.commons.StringCommons;
 import org.rspeer.game.component.tab.Magic;
-import jag.game.scene.entity.RSNpc;
-import jag.game.type.RSNpcDefinition;
 
 import java.util.Collections;
 import java.util.List;

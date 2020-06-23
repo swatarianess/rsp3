@@ -1,9 +1,9 @@
 package org.rspeer.game.adapter.social;
 
-import org.rspeer.commons.StringCommons;
-import org.rspeer.game.adapter.Adapter;
 import jag.game.relationship.RSChatter;
 import jag.game.relationship.RSNamePair;
+import org.rspeer.commons.StringCommons;
+import org.rspeer.game.adapter.Adapter;
 
 public class Chatter<T extends RSChatter> extends Adapter<T> {
 

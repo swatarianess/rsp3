@@ -1,13 +1,13 @@
 package org.rspeer.game.adapter.scene;
 
+import jag.game.scene.entity.RSPlayer;
+import org.rspeer.commons.StringCommons;
 import org.rspeer.game.Game;
 import org.rspeer.game.action.Action;
 import org.rspeer.game.action.ActionOpcode;
 import org.rspeer.game.action.tree.PlayerAction;
-import org.rspeer.commons.StringCommons;
 import org.rspeer.game.adapter.component.Inventory;
 import org.rspeer.game.component.tab.Magic;
-import jag.game.scene.entity.RSPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
