@@ -1,8 +1,10 @@
 package org.rspeer.ui.event;
 
+import org.rspeer.event.listener.EventListener;
 import org.rspeer.ui.Window;
+import org.rspeer.ui.event.listener.UIListener;
 
-public class SplashEvent extends UIEvent<Window> {
+public class SplashEvent extends UIEvent {
 
     private final String message;
 
@@ -19,5 +21,10 @@ public class SplashEvent extends UIEvent<Window> {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public void dispatch(EventListener listener) {
+        ((UIListener) listener).notify(this);
     }
 }

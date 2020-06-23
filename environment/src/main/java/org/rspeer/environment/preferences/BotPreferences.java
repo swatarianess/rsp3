@@ -3,16 +3,15 @@ package org.rspeer.environment.preferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.environment.preferences.type.BotPreference;
 import org.rspeer.environment.preferences.type.LocalePreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings(value = "all")
 public class BotPreferences {
@@ -66,5 +65,13 @@ public class BotPreferences {
 
         preference.set(value);
         preference.notify(this);
+    }
+
+    public <T> BotPreference<T> get(Class<? extends BotPreference<T>> clazz) {
+        BotPreference<T> preference = (BotPreference<T>) preferences.get(clazz.getName());
+        if (preference == null) {
+            throw new IllegalArgumentException();
+        }
+        return preference;
     }
 }

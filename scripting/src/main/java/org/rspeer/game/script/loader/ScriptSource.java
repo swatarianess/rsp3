@@ -65,11 +65,14 @@ public class ScriptSource implements Comparable<ScriptSource> {
             return false;
         }
         ScriptSource other = (ScriptSource) o;
-        return other.getTarget() == getTarget()
-               && other.getDescription().equals(getDescription())
-               && other.getDeveloper().equals(getDeveloper())
-               && other.getName().equals(getName())
-               && other.local == local;
+        return other.getTarget() == getTarget() && shallowEquals(other);
+    }
+
+    public boolean shallowEquals(ScriptSource other) {
+        return other.getDescription().equals(getDescription())
+                && other.getDeveloper().equals(getDeveloper())
+                && other.getName().equals(getName())
+                && other.local == local;
     }
 
     @Override
