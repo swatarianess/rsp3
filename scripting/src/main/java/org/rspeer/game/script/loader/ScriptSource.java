@@ -27,14 +27,6 @@ public class ScriptSource implements Comparable<ScriptSource> {
         this.developer = developer;
     }
 
-    public final Class<? extends Script> getTarget() {
-        return target;
-    }
-
-    public final void setTarget(Class<? extends Script> target) {
-        this.target = target;
-    }
-
     public String getName() {
         return name;
     }
@@ -45,6 +37,18 @@ public class ScriptSource implements Comparable<ScriptSource> {
 
     public String getDeveloper() {
         return developer;
+    }
+
+    public double getVersion() {
+        return version;
+    }
+
+    public final Class<? extends Script> getTarget() {
+        return target;
+    }
+
+    public final void setTarget(Class<? extends Script> target) {
+        this.target = target;
     }
 
     public boolean isLocal() {
@@ -74,9 +78,5 @@ public class ScriptSource implements Comparable<ScriptSource> {
     @Override
     public int compareTo(ScriptSource o) {
         return getName().toLowerCase().compareTo(o.getName().toLowerCase());
-    }
-
-    public double getVersion() {
-        return version;
     }
 }
