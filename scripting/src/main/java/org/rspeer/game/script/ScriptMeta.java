@@ -8,9 +8,9 @@ public @interface ScriptMeta {
 
     String name();
 
-    double version() default 1.0;
+    String desc() default "";
 
     String developer() default "";
 
-    String desc() default "";
+    double version() default 1.0;
 }

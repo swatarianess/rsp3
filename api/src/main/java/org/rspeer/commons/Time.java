@@ -85,7 +85,7 @@ public class Time {
      * @param max the max amount of milliseconds to sleep for
      */
     public static void sleep(int min, int max) {
-        sleep(min, max);
+        sleep(Random.nextInt(min, max));
     }
 
     /**
