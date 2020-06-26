@@ -29,13 +29,7 @@ public class Game {
     public static synchronized void setClient(RSClient client) {
         Game.client = client;
         client.setEventMediator(new EventMediator());
-        client.setEventDispatcher(
-                new EventDispatcher.Factory("client")
-                        .processor(new Processor.Immediate())
-                        .registry(new Registry.Reflective())
-                        .handler(Throwable::printStackTrace)
-                        .get()
-        );
+        client.setEventDispatcher(EventDispatcher.Factory.getDefault("client"));
     }
 
     public static void queueAction(Action action) {

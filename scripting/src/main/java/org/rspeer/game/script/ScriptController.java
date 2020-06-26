@@ -1,20 +1,13 @@
 package org.rspeer.game.script;
 
-import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
 
-    private final EventDispatcher eventDispatcher;
-
     private Script active;
     private ScriptSource source;
     private Thread scriptThread;
-
-    public ScriptController(EventDispatcher eventDispatcher) {
-        this.eventDispatcher = eventDispatcher;
-    }
 
     public void start(ScriptProvider provider, ScriptSource source) {
         if (active != null) {
@@ -23,8 +16,6 @@ public class ScriptController {
 
         this.source = source;
         active = provider.define(source);
-        active.setEventDispatcher(eventDispatcher);
-        active.setSource(source);
         active.setState(Script.State.STARTING);
         active.setState(Script.State.RUNNING);
 

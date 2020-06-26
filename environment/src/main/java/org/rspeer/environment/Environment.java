@@ -2,8 +2,6 @@ package org.rspeer.environment;
 
 import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.event.EventDispatcher;
-import org.rspeer.event.Processor;
-import org.rspeer.event.Registry;
 import org.rspeer.game.script.ScriptController;
 
 /**
@@ -17,12 +15,8 @@ public class Environment {
     private BotPreferences preferences;
 
     public Environment() {
-        eventDispatcher = new EventDispatcher.Factory("bot")
-                .processor(new Processor.Immediate())
-                .registry(new Registry.Reflective())
-                .handler(Throwable::printStackTrace)
-                .get();
-        scriptController = new ScriptController(eventDispatcher);
+        eventDispatcher = EventDispatcher.Factory.getDefault("bot");
+        scriptController = new ScriptController();
         botContext = new BotContext();
     }
 

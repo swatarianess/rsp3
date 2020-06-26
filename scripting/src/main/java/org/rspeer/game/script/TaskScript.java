@@ -11,7 +11,7 @@ public abstract class TaskScript extends Script {
     private final List<Task> tasks = new CopyOnWriteArrayList<>();
 
     @Override
-    public abstract void onStart();
+    public abstract void onStart(String... args);
 
     public final void submit(Task... tasks) {
         Collections.addAll(this.tasks, tasks);

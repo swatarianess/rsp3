@@ -47,6 +47,10 @@ public class EventDispatcher {
             this.name = name;
         }
 
+        public static EventDispatcher getDefault(String name) {
+            return new Factory(name).get();
+        }
+
         public Factory registry(Registry registry) {
             this.registry = registry;
             return this;

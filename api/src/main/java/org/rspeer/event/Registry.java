@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-@SuppressWarnings("rawtypes")
 public interface Registry {
 
     void subscribe(Object type);
