@@ -59,6 +59,7 @@ public abstract class Script implements Runnable {
     @Override
     public final void run() {
         environmentDispatcher.dispatch(new ScriptChangeEvent(source, Script.State.RUNNING, Script.State.STOPPED));
+        Game.getEventDispatcher().subscribe(this);
         while (true) {
             try {
                 if (state == State.PAUSED) {
@@ -84,6 +85,7 @@ public abstract class Script implements Runnable {
                 Time.sleep(1000);
             }
         }
+        Game.getEventDispatcher().unsubscribe(this);
         environmentDispatcher.dispatch(new ScriptChangeEvent(source, Script.State.STOPPED, Script.State.RUNNING));
     }
 
