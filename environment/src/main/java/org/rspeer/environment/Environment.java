@@ -17,7 +17,6 @@ public class Environment {
     public Environment() {
         eventDispatcher = EventDispatcher.Factory.getDefault("bot");
         scriptController = new ScriptController(eventDispatcher);
-        eventDispatcher.subscribe(scriptController);
         botContext = new BotContext();
     }
 

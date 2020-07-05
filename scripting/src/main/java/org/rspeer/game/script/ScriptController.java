@@ -19,6 +19,7 @@ public class ScriptController {
 
     public ScriptController(EventDispatcher environmentDispatcher) {
         this.environmentDispatcher = environmentDispatcher;
+        environmentDispatcher.subscribe(this);
     }
 
     public void setReload(boolean reload) {
