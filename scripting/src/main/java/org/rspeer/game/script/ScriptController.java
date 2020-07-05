@@ -29,6 +29,10 @@ public class ScriptController {
         this.reload = reload;
     }
 
+    public void setReload(boolean reload) {
+        this.reload = reload;
+    }
+
     public void start(ScriptProvider provider, ScriptSource source) {
         if (active != null) {
             throw new IllegalStateException("A script is already running");
