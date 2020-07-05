@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.script.Script;
 import org.rspeer.game.script.loader.ScriptBundle;
 import org.rspeer.game.script.loader.ScriptProvider;
@@ -76,9 +77,12 @@ public class LocalScriptLoader implements ScriptProvider {
     }
 
     @Override
-    public Script define(ScriptSource source) {
+    public Script define(ScriptSource source, EventDispatcher environmentDispatcher) {
         try {
-            return source.getTarget().getDeclaredConstructor().newInstance();
+            Script script = source.getTarget().getDeclaredConstructor().newInstance();
+            script.setEnvironmentDispatcher(environmentDispatcher);
+            script.setSource(source);
+            return script;
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             return null;
         }
