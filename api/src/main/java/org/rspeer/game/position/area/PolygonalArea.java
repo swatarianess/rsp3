@@ -27,12 +27,13 @@ public class PolygonalArea implements Area {
         this.ps = new HashMap<>();
         this.floorLevel = edges.length > 0 ? edges[0].getFloorLevel() : 0;
 
-        Rectangle bounds = new Polygon(xPoints, yPoints, xPoints.length).getBounds();
+        Polygon polygon = new Polygon(xPoints, yPoints, xPoints.length);
+        Rectangle bounds = polygon.getBounds();
 
         for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
             for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
 
-                if (bounds.contains(x, y)) {
+                if (polygon.contains(x, y)) {
                     Position position = new Position(x, y, floorLevel);
                     this.ps.put(position.hashCode(), position);
                 }
