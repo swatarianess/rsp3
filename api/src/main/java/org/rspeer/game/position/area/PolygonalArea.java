@@ -3,15 +3,16 @@ package org.rspeer.game.position.area;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.rspeer.game.adapter.type.SceneNode;
 import org.rspeer.game.position.Position;
 
 public class PolygonalArea implements Area {
 
     private final int floorLevel;
-    private final List<Position> ps;
-    private final java.awt.geom.Area polygon;
+    private final Map<Integer, Position> ps;
 
     PolygonalArea(Position... edges) {
         int[] xPoints = new int[edges.length];
@@ -23,17 +24,17 @@ public class PolygonalArea implements Area {
             yPoints[i] = position.getY();
         }
 
-        this.ps = new ArrayList<>();
-        this.polygon = new java.awt.geom.Area(new Polygon(xPoints, yPoints, xPoints.length));
+        this.ps = new HashMap<>();
         this.floorLevel = edges.length > 0 ? edges[0].getFloorLevel() : 0;
 
-        Rectangle bounds = polygon.getBounds();
+        Rectangle bounds = new Polygon(xPoints, yPoints, xPoints.length).getBounds();
 
         for (int x = bounds.x; x < bounds.x + bounds.width; x++) {
             for (int y = bounds.y; y < bounds.y + bounds.height; y++) {
 
-                if (polygon.contains(x, y)) {
-                    this.ps.add(new Position(x, y, floorLevel));
+                if (bounds.contains(x, y)) {
+                    Position position = new Position(x, y, floorLevel);
+                    this.ps.put(position.hashCode(), position);
                 }
             }
         }
@@ -46,12 +47,12 @@ public class PolygonalArea implements Area {
 
     @Override
     public List<Position> getTiles() {
-        return ps;
+        return new ArrayList<>(ps.values());
     }
 
     @Override
     public boolean contains(SceneNode entity) {
         return entity != null
-               && polygon.contains(entity.getX(), entity.getY());
+               && ps.containsKey(entity.getPosition().hashCode());
     }
 }
