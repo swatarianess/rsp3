@@ -3,6 +3,8 @@ package org.rspeer.game.script;
 import org.rspeer.event.EventDispatcher;
 import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.event.ScriptChangeEvent;
+import org.rspeer.game.script.loader.ScriptBundle;
+import org.rspeer.game.script.loader.ScriptLoaderProvider;
 import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
@@ -13,9 +15,14 @@ public class ScriptController {
     private Script active;
     private ScriptSource source;
     private Thread scriptThread;
+    private boolean reload;
 
     public ScriptController(EventDispatcher environmentDispatcher) {
         this.environmentDispatcher = environmentDispatcher;
+    }
+
+    public void setReload(boolean reload) {
+        this.reload = reload;
     }
 
     public void start(ScriptProvider provider, ScriptSource source) {
@@ -53,8 +60,23 @@ public class ScriptController {
                 active = null;
             }
 
-            source = null;
-            scriptThread = null;
+            if (reload) {
+                reload = false;
+
+                ScriptProvider loader = new ScriptLoaderProvider().get();
+                ScriptBundle bundle = loader.load();
+                ScriptSource reloaded = bundle.findShallow(source);
+
+                if (reloaded != null) {
+                    start(loader, reloaded);
+                } else {
+                    source = null;
+                    scriptThread = null;
+                }
+            } else {
+                source = null;
+                scriptThread = null;
+            }
         }
     }
 }

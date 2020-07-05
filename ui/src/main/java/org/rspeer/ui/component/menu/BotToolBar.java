@@ -8,9 +8,6 @@ import org.rspeer.environment.Environment;
 import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.Script;
 import org.rspeer.game.script.event.ScriptChangeEvent;
-import org.rspeer.game.script.loader.ScriptBundle;
-import org.rspeer.game.script.loader.ScriptLoaderProvider;
-import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.ui.component.script.ScriptSelector;
 
@@ -89,14 +86,8 @@ public class BotToolBar extends JToolBar {
                 if (currentScript == null) {
                     return;
                 }
-                ScriptProvider loader = new ScriptLoaderProvider().get();
                 environment.getScriptController().stop();
-
-                ScriptBundle bundle = loader.load();
-                ScriptSource reloaded = bundle.findShallow(source);
-                if (reloaded != null) {
-                    environment.getScriptController().start(loader, reloaded);
-                }
+                environment.getScriptController().setReload(true);
             });
         }
     }
