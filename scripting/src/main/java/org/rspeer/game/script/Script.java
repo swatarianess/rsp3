@@ -31,6 +31,14 @@ public abstract class Script implements Runnable {
 
     }
 
+    public final void setSource(ScriptSource source) {
+        this.source = source;
+    }
+
+    public final void setEnvironmentDispatcher(EventDispatcher environmentDispatcher) {
+        this.environmentDispatcher = environmentDispatcher;
+    }
+
     public State getState() {
         return state;
     }
@@ -77,14 +85,6 @@ public abstract class Script implements Runnable {
             }
         }
         environmentDispatcher.dispatch(new ScriptChangeEvent(source, Script.State.STOPPED, Script.State.RUNNING));
-    }
-
-    public void setSource(ScriptSource source) {
-        this.source = source;
-    }
-
-    public void setEnvironmentDispatcher(EventDispatcher environmentDispatcher) {
-        this.environmentDispatcher = environmentDispatcher;
     }
 
     public enum State {
