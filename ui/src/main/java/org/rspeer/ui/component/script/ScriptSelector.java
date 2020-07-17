@@ -27,10 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
-
 import org.rspeer.environment.Environment;
-import org.rspeer.game.script.Script;
-import org.rspeer.game.script.event.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptBundle;
 import org.rspeer.game.script.loader.ScriptLoaderProvider;
 import org.rspeer.game.script.loader.ScriptProvider;
@@ -217,9 +214,6 @@ public class ScriptSelector extends Window<JDialog> {
 
             button.addActionListener(act -> {
                 environment.getScriptController().start(loader, source);
-                environment.getEventDispatcher().dispatch(
-                        new ScriptChangeEvent(source, Script.State.RUNNING, Script.State.STOPPED)
-                );
                 dispose();
             });
 
