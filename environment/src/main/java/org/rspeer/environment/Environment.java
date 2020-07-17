@@ -1,5 +1,7 @@
 package org.rspeer.environment;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.script.ScriptController;
@@ -9,16 +11,18 @@ import org.rspeer.game.script.ScriptController;
  */
 public class Environment {
 
-    private final EventDispatcher eventDispatcher;
-    private final ScriptController scriptController;
-    private final BotContext botContext;
-    private BotPreferences preferences;
+    @Inject
+    @Named("BotDispatcher")
+    private EventDispatcher eventDispatcher;
 
-    public Environment() {
-        eventDispatcher = EventDispatcher.Factory.getDefault("bot");
-        scriptController = new ScriptController();
-        botContext = new BotContext();
-    }
+    @Inject
+    private ScriptController scriptController;
+
+    @Inject
+    private BotContext botContext;
+
+    @Inject
+    private BotPreferences preferences;
 
     public ScriptController getScriptController() {
         return scriptController;
@@ -30,10 +34,6 @@ public class Environment {
 
     public BotPreferences getPreferences() {
         return preferences;
-    }
-
-    public void setPreferences(BotPreferences preferences) {
-        this.preferences = preferences;
     }
 
     public EventDispatcher getEventDispatcher() {

@@ -6,24 +6,25 @@ package org.rspeer.ui.worker;
     Date: Sunday - 05/31/2020
 */
 
+import com.google.inject.Inject;
 import jag.game.RSClient;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-import javax.swing.JFrame;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.event.PreferenceEvent;
 import org.rspeer.environment.preferences.type.BotPreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
 import org.rspeer.game.Game;
 import org.rspeer.game.loader.GameLoader;
-import org.rspeer.ui.Window;
+import org.rspeer.ui.BotFrame;
 import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
 
 public class LoadGameWorker extends BotWorker<RSClient, String> {
 
-    public LoadGameWorker(Environment environment, Window<JFrame> window) {
+    @Inject
+    public LoadGameWorker(Environment environment, BotFrame window) {
         super(environment, window);
     }
 

@@ -1,5 +1,15 @@
 package org.rspeer.ui;
 
+import com.google.inject.Inject;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
 import org.rspeer.environment.preferences.event.PreferenceEvent;
@@ -13,11 +23,6 @@ import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
 import org.rspeer.ui.event.UIEvent;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-
 public class BotFrame extends Window<JFrame> {
 
     private final Environment environment;
@@ -25,6 +30,7 @@ public class BotFrame extends Window<JFrame> {
     private BotMenuBar menu;
     private Splash splash;
 
+    @Inject
     public BotFrame(Environment environment) {
         super(new JFrame(Configuration.getApplicationTitle()));
         this.environment = environment;
