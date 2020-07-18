@@ -1,5 +1,7 @@
 package org.rspeer.game.script;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.rspeer.event.EventDispatcher;
 import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.event.ScriptChangeEvent;
@@ -17,7 +19,8 @@ public class ScriptController {
     private Thread scriptThread;
     private boolean reload;
 
-    public ScriptController(EventDispatcher environmentDispatcher) {
+    @Inject
+    public ScriptController(@Named("BotDispatcher") EventDispatcher environmentDispatcher) {
         this.environmentDispatcher = environmentDispatcher;
         environmentDispatcher.subscribe(this);
     }
