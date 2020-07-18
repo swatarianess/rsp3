@@ -4,7 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import javax.swing.SwingUtilities;
-import org.rspeer.environment.Environment;
 import org.rspeer.ui.BotFrame;
 import org.rspeer.ui.worker.LoadGameWorker;
 
@@ -13,24 +12,19 @@ import org.rspeer.ui.worker.LoadGameWorker;
  */
 public class Application {
 
-    public static final Injector injector = Guice.createInjector(new ApplicationModule());
-
-    public static void main(String[] args) {
-        try {
-            Application application = injector.getInstance(Application.class);
-            application.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private static final Injector injector = Guice.createInjector(new ApplicationModule());
 
     @Inject
-    private Environment environment;
+    private BotFrame botFrame;
+
+    public static void main(String[] args) {
+        Application application = injector.getInstance(Application.class);
+        application.start();
+    }
 
     public void start() {
         SwingUtilities.invokeLater(() -> {
-            BotFrame ui = injector.getInstance(BotFrame.class);
-            ui.display();
+            botFrame.display();
 
             LoadGameWorker loader = injector.getInstance(LoadGameWorker.class);
             loader.execute();
