@@ -21,7 +21,6 @@ public class Application {
     @Inject
     private BotFrame botFrame;
 
-
     @Inject
     private LoadGameWorker loadGameWorker;
 
@@ -35,7 +34,6 @@ public class Application {
         SwingUtilities.invokeLater(() -> {
             botFrame.display();
             loadGameWorker.execute();
-            botFrame.display();
 
             LoadGameWorker loader = injector.getInstance(LoadGameWorker.class);
             loader.execute();

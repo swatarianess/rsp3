@@ -27,12 +27,15 @@ public class BotMenuBar extends JMenuBar {
     };
 
     private final BotPreferences preferences;
+
     private JCheckBoxMenuItem renderScene;
 
     @Inject
     public BotMenuBar(BotPreferences preferences, BotFrame frame) {
         this.preferences = preferences;
         add(createFileMenu());
+        add(createDebugMenu(preferences, frame));
+        add(createWindowMenu(frame));
         add(createDebugMenu(preferences, frame));
         add(createWindowMenu(frame));
         add(createSettingsMenu(preferences));
