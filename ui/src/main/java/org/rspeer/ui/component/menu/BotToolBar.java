@@ -1,16 +1,15 @@
 package org.rspeer.ui.component.menu;
 
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import org.rspeer.environment.Environment;
 import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.Script;
 import org.rspeer.game.script.event.ScriptChangeEvent;
-import org.rspeer.game.script.loader.ScriptBundle;
-import org.rspeer.game.script.loader.ScriptLoaderProvider;
-import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 import org.rspeer.ui.component.script.ScriptSelector;
-
-import javax.swing.*;
 
 public class BotToolBar extends JToolBar {
 
@@ -35,11 +34,6 @@ public class BotToolBar extends JToolBar {
                 ScriptSelector selector = new ScriptSelector(environment.getBotContext().getFrame(), environment);
                 selector.display();
             } else {
-                environment.getEventDispatcher().dispatch(new ScriptChangeEvent(
-                        environment.getScriptController().getSource(),
-                        Script.State.STOPPED,
-                        Script.State.RUNNING
-                ));
                 environment.getScriptController().stop();
             }
         });
@@ -92,21 +86,8 @@ public class BotToolBar extends JToolBar {
                 if (currentScript == null) {
                     return;
                 }
-                ScriptProvider loader = new ScriptLoaderProvider().get();
-                Script.State currentState = currentScript.getState();
-                environment.getEventDispatcher().dispatch(
-                        new ScriptChangeEvent(source, Script.State.STOPPED, currentState)
-                );
                 environment.getScriptController().stop();
-
-                ScriptBundle bundle = loader.load();
-                ScriptSource reloaded = bundle.findShallow(source);
-                if (reloaded != null) {
-                    environment.getScriptController().start(loader, reloaded);
-                    environment.getEventDispatcher().dispatch(
-                            new ScriptChangeEvent(reloaded, Script.State.RUNNING, Script.State.STOPPED)
-                    );
-                }
+                environment.getScriptController().setReload(true);
             });
         }
     }
