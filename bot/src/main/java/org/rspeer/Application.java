@@ -3,9 +3,10 @@ package org.rspeer;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import javax.swing.SwingUtilities;
 import org.rspeer.ui.BotFrame;
 import org.rspeer.ui.worker.LoadGameWorker;
+
+import javax.swing.*;
 
 /**
  * Entry point for the application
@@ -17,6 +18,9 @@ public class Application {
     @Inject
     private BotFrame botFrame;
 
+    @Inject
+    private LoadGameWorker loadGameWorker;
+    
     public static void main(String[] args) {
         Application application = injector.getInstance(Application.class);
         application.start();
@@ -25,9 +29,7 @@ public class Application {
     public void start() {
         SwingUtilities.invokeLater(() -> {
             botFrame.display();
-
-            LoadGameWorker loader = injector.getInstance(LoadGameWorker.class);
-            loader.execute();
+            loadGameWorker.execute();
         });
     }
 }

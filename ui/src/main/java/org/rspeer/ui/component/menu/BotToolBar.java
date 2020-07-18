@@ -1,29 +1,34 @@
 package org.rspeer.ui.component.menu;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import org.rspeer.environment.Environment;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import org.rspeer.environment.preferences.BotPreferences;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.event.Subscribe;
 import org.rspeer.game.script.Script;
+import org.rspeer.game.script.ScriptController;
 import org.rspeer.game.script.event.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptSource;
+import org.rspeer.ui.BotFrame;
 import org.rspeer.ui.component.script.ScriptSelector;
+
+import javax.swing.*;
 
 public class BotToolBar extends JToolBar {
 
     private final StartButton start;
     private final ReloadButton reload;
 
-    public BotToolBar(Environment environment) {
-        environment.getEventDispatcher().subscribe(this);
+    @Inject
+    public BotToolBar(@Named("BotDispatcher") EventDispatcher dispatcher, BotFrame frame,
+                      BotPreferences preferences, ScriptController controller) {
+        dispatcher.subscribe(this);
 
         setFloatable(false);
 
         add(Box.createHorizontalGlue());
 
-        reload = new ReloadButton(environment);
+        this.reload = new ReloadButton(controller);
         add(reload);
 
         start = new StartButton();
@@ -31,10 +36,10 @@ public class BotToolBar extends JToolBar {
 
         start.addActionListener(e -> {
             if (start.getText().equals("Start")) {
-                ScriptSelector selector = new ScriptSelector(environment.getBotContext().getFrame(), environment);
+                ScriptSelector selector = new ScriptSelector(preferences, frame, controller);
                 selector.display();
             } else {
-                environment.getScriptController().stop();
+                controller.stop();
             }
         });
     }
@@ -70,7 +75,7 @@ public class BotToolBar extends JToolBar {
 
     public static class ReloadButton extends JButton {
 
-        public ReloadButton(Environment environment) {
+        public ReloadButton(ScriptController controller) {
             setText("Reload");
             setVisible(false);
             setFocusPainted(false);
@@ -78,16 +83,16 @@ public class BotToolBar extends JToolBar {
             setContentAreaFilled(true);
             setFocusable(false);
             addActionListener(e -> {
-                ScriptSource source = environment.getScriptController().getSource();
+                ScriptSource source = controller.getSource();
                 if (source == null) {
                     return;
                 }
-                Script currentScript = environment.getScriptController().getActive();
+                Script currentScript = controller.getActive();
                 if (currentScript == null) {
                     return;
                 }
-                environment.getScriptController().stop();
-                environment.getScriptController().setReload(true);
+                controller.stop();
+                controller.setReload(true);
             });
         }
     }

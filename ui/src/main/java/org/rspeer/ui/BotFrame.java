@@ -1,21 +1,15 @@
 package org.rspeer.ui;
 
 import com.google.inject.Inject;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.WindowConstants;
+import com.google.inject.name.Named;
 import org.rspeer.commons.Configuration;
-import org.rspeer.environment.Environment;
+import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.environment.preferences.event.PreferenceEvent;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
 import org.rspeer.environment.preferences.type.SceneRenderPreference;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.event.Subscribe;
+import org.rspeer.game.script.ScriptController;
 import org.rspeer.ui.component.menu.BotMenuBar;
 import org.rspeer.ui.component.menu.BotToolBar;
 import org.rspeer.ui.component.splash.Splash;
@@ -23,20 +17,33 @@ import org.rspeer.ui.event.SetAppletEvent;
 import org.rspeer.ui.event.SplashEvent;
 import org.rspeer.ui.event.UIEvent;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
 public class BotFrame extends Window<JFrame> {
 
-    private final Environment environment;
+    private final BotPreferences preferences;
+    private final EventDispatcher eventDispatcher;
+    private final BotMenuBar menu;
 
-    private BotMenuBar menu;
     private Splash splash;
 
     @Inject
-    public BotFrame(Environment environment) {
+    public BotFrame(BotPreferences preferences, @Named("BotDispatcher") EventDispatcher eventDispatcher,
+                    ScriptController controller) {
         super(new JFrame(Configuration.getApplicationTitle()));
-        this.environment = environment;
+        this.preferences = preferences;
+        this.eventDispatcher = eventDispatcher;
+        this.menu = new BotMenuBar(preferences, this);
         applyDefaults();
-        applyComponents();
+        applyComponents(new BotToolBar(eventDispatcher, this, preferences, controller));
         applyListeners();
+    }
+
+    public JFrame getFrame() {
+        return super.frame;
     }
 
     private void applyDefaults() {
@@ -49,25 +56,22 @@ public class BotFrame extends Window<JFrame> {
         }
     }
 
-    private void applyComponents() {
+    private void applyComponents(BotToolBar botToolBar) {
         try {
             frame.setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        frame.setAlwaysOnTop(environment.getPreferences().valueOf(AlwaysOnTopPreference.class));
+        frame.setAlwaysOnTop(preferences.valueOf(AlwaysOnTopPreference.class));
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         splash = new Splash();
         frame.add(splash, BorderLayout.CENTER);
 
-        menu = new BotMenuBar(environment);
-        frame.setJMenuBar(menu);
-        frame.add(new BotToolBar(environment), BorderLayout.NORTH);
-
-        environment.getBotContext().setFrame(frame);
+        frame.setJMenuBar(this.menu);
+        frame.add(botToolBar, BorderLayout.NORTH);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -77,7 +81,7 @@ public class BotFrame extends Window<JFrame> {
     }
 
     private void applyListeners() {
-        environment.getEventDispatcher().subscribe(this);
+        eventDispatcher.subscribe(this);
         /*
                 Typically, we should add a windowClosing callback for the frame
                 but we're not doing that here since the setDefaultCloseOperation
