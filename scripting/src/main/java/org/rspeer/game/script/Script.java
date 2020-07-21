@@ -1,16 +1,22 @@
 package org.rspeer.game.script;
 
-import java.nio.file.Path;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.rspeer.commons.Configuration;
 import org.rspeer.commons.Executor;
 import org.rspeer.commons.Time;
 import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.Game;
+import org.rspeer.game.provider.callback.EventMediator;
 import org.rspeer.game.script.event.ScriptChangeEvent;
 import org.rspeer.game.script.loader.ScriptSource;
 
+import java.nio.file.Path;
+
 //TODO make this better, add random handling (login screen, welcome screen etc)
 public abstract class Script implements Runnable {
+
+    private static final Logger logger = LogManager.getLogger(EventMediator.class);
 
     private ScriptSource source;
     private EventDispatcher environmentDispatcher;
@@ -45,11 +51,19 @@ public abstract class Script implements Runnable {
 
     public final void setState(State state) {
         this.state = state;
-        if (state == State.STOPPED) {
-            Executor.execute(this::onFinish);
-        } else if (state == State.STARTING) {
-            onStart();
+
+        switch (state) {
+            case STOPPED:
+                logger.trace("Script stopped.");
+                Executor.execute(this::onFinish);
+                break;
+
+            case STARTING:
+                logger.trace("Script Starting.");
+                onStart();
+                break;
         }
+
     }
 
     public final ScriptMeta getMeta() {
@@ -81,7 +95,7 @@ public abstract class Script implements Runnable {
 
                 Time.sleep(sleep);
             } catch (Throwable e) {
-                e.printStackTrace();
+                logger.catching(e);
                 Time.sleep(1000);
             }
         }
@@ -94,5 +108,9 @@ public abstract class Script implements Runnable {
         RUNNING,
         PAUSED,
         STOPPED
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

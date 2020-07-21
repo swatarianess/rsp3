@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%-5level] %logger{1} - %msg%n" />
+        </Console>
+        <!--todo: Fix the rollingFile configuration.-->
+        <RollingFile name="File" fileName="logs/rsp3-${date:yyyy-MM-dd_HH}.log" filepattern="logs/rsp3-%d{yyyy-MM-dd_HH}-%i.log" immediateFlush="false" append="false">
+            <PatternLayout pattern="[%-5level] %logger{1} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <loggers>
+        <root level="TRACE" includeLocation="true">
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="Console"/>
+        </root>
+    </loggers>
+
+</Configuration>

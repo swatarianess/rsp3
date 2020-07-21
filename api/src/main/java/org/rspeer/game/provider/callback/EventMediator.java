@@ -3,6 +3,8 @@ package org.rspeer.game.provider.callback;
 import jag.game.RSClient;
 import jag.graphics.RSGraphicsProvider;
 import jag.script.RSScriptEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.rspeer.commons.Time;
 import org.rspeer.game.Definitions;
 import org.rspeer.game.Game;
@@ -13,7 +15,10 @@ import org.rspeer.game.event.RenderEvent;
 
 import java.awt.*;
 
+
 public class EventMediator {
+
+    private static final Logger logger = LogManager.getLogger(EventMediator.class);
 
     private final EngineTasks engineTasks;
 
@@ -65,7 +70,7 @@ public class EventMediator {
 
     public void notifyProcessLoginResponse(int code) {
         try {
-            System.out.println("Login response: " + code);
+            logger.debug("Login response: " + code);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,9 +102,9 @@ public class EventMediator {
 
             Action resolved = Action.valueOf(op, pri, sec, ter);
             if (resolved != null) {
-                System.out.println(resolved);
+                logger.debug(resolved);
             } else {
-                System.out.println("Action[op=" + ActionOpcode.valueOf(op) + ",pri=" + pri + ",sec=" + sec + ",ter=" + ter + "]");
+                logger.debug("Action[op=" + ActionOpcode.valueOf(op) + ",pri=" + pri + ",sec=" + sec + ",ter=" + ter + "]");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +121,8 @@ public class EventMediator {
             }
 
             if (oldState != state) {
-                System.out.println("Game state: " + oldState + " -> " + state);
+                //System.out.println("Game state: " + oldState + " -> " + state);
+                logger.debug("Game state: " + oldState + " -> " + state);
             }
         } catch (Exception e) {
             e.printStackTrace();

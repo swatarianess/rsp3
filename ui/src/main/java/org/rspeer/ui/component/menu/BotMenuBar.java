@@ -1,6 +1,9 @@
 package org.rspeer.ui.component.menu;
 
 import com.google.inject.Inject;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
@@ -17,12 +20,13 @@ import java.util.function.Consumer;
 
 public class BotMenuBar extends JMenuBar {
 
+    private static final Logger logger = LogManager.getLogger("UI");
+
     private static final DebugEntry[] DEBUG_ENTRIES = new DebugEntry[]{
             new DebugEntry(new JCheckBoxMenuItem("Game"), new GameDebug())
     };
 
     private final BotPreferences preferences;
-
     private JCheckBoxMenuItem renderScene;
 
     @Inject
@@ -31,11 +35,17 @@ public class BotMenuBar extends JMenuBar {
         add(createFileMenu());
         add(createDebugMenu(preferences, frame));
         add(createWindowMenu(frame));
+        add(createSettingsMenu(preferences));
     }
 
     private JMenu createFileMenu() {
         JMenu file = new JMenu(Message.FILE.getActive(preferences));
-        //TODO: stuff
+
+        JMenuItem fileExit = new JMenuItem("Exit");
+        fileExit.addActionListener(e -> System.exit(0));
+
+        file.add(fileExit);
+
         return file;
     }
 
@@ -85,6 +95,30 @@ public class BotMenuBar extends JMenuBar {
         debug.add(itfs);
 
         return debug;
+    }
+
+    private JMenu createSettingsMenu(BotPreferences preferences) {
+        JMenu settings = new JMenu(Message.SETTINGS.getActive(preferences));
+
+        JCheckBoxMenuItem loggingMenuItem = new JCheckBoxMenuItem("Logging");
+        loggingMenuItem.setSelected(true);
+
+        loggingMenuItem.addActionListener(e -> {
+            logger.trace("Logging set to: " + loggingMenuItem.isSelected());
+        });
+
+        JComboBox<Level> loggingPopupMenu = new JComboBox<>(Level.values());
+
+        loggingPopupMenu.addActionListener(e -> {
+            logger.debug("Current level: " + logger.getLevel().name());
+
+            System.out.println("STUFFFFF");
+        });
+
+        settings.add(loggingMenuItem);
+        settings.add(loggingPopupMenu);
+
+        return settings;
     }
 
     public JCheckBoxMenuItem getRenderScene() {

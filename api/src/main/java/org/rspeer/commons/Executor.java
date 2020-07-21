@@ -1,5 +1,7 @@
 package org.rspeer.commons;
 
+import org.apache.logging.log4j.LogManager;
+
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
@@ -43,7 +45,8 @@ public class Executor {
             if (!EXECUTOR.awaitTermination(10, TimeUnit.SECONDS)) {
                 EXECUTOR.shutdownNow();
                 if (!EXECUTOR.awaitTermination(10, TimeUnit.SECONDS)) {
-                    System.err.println("Pool did not terminate.");
+                    LogManager.getLogger().error("Pool did not terminate.");
+                    //todo: Clean this messy use of LogManager?
                 }
             }
         } catch (InterruptedException ignored) {

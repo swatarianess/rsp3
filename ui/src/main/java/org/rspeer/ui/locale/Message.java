@@ -10,6 +10,7 @@ import java.util.Map;
 
 public enum Message {
 
+    SETTINGS("Settings"),
     SCRIPT("Script"),
     INTERFACE_EXPLORER("Interface Explorer"),
     RELOAD("Reload"),

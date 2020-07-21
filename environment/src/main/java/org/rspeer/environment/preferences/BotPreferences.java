@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 import org.rspeer.commons.Configuration;
-import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
-import org.rspeer.environment.preferences.type.BotPreference;
-import org.rspeer.environment.preferences.type.LocalePreference;
-import org.rspeer.environment.preferences.type.SceneRenderPreference;
+import org.rspeer.environment.preferences.type.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +27,7 @@ public class BotPreferences {
         map(new LocalePreference());
         map(new SceneRenderPreference());
         map(new AlwaysOnTopPreference());
+        map(new LoggerPreference());
 
         for (BotPreference preference : preferences.values()) {
             preference.set(preference.getDefault());
