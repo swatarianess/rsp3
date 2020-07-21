@@ -1,9 +1,6 @@
 package org.rspeer.ui.component.menu;
 
 import com.google.inject.Inject;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.preferences.BotPreferences;
 import org.rspeer.environment.preferences.type.AlwaysOnTopPreference;
@@ -27,7 +24,6 @@ public class BotMenuBar extends JMenuBar {
     };
 
     private final BotPreferences preferences;
-
     private JCheckBoxMenuItem renderScene;
 
     @Inject

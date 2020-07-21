@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import jag.game.RSClient;
 import jag.graphics.RSGraphicsProvider;
 import jag.script.RSScriptEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.rspeer.commons.Time;
 import org.rspeer.game.Definitions;
 import org.rspeer.game.Game;
